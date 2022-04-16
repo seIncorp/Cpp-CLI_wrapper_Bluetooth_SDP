@@ -564,7 +564,7 @@ public:
 
 
 
-
+	// TOOD: daj v private
 	// exporting default attr functions sam as in default class
 	template<class A, class B>
 	void save_exported_data_DEFAULT(A main, BYTE* submain)
@@ -752,7 +752,7 @@ public:
 
 
 
-
+	// TOOD: daj v private
 	// deleting structures
 	// delete function for default data of attribute
 	template<class A>
@@ -882,7 +882,7 @@ public:
 
 
 
-
+	// TOOD: daj v private
 	// printing functions
 	template<class A, class C>
 	void print_data_DEFAULT(A main, BYTE* submain)
@@ -930,6 +930,7 @@ public:
 	void print_data_OBEX();
 	void print_data_PBAP();
 	void print_data_PNPINFO();
+
 
 	void CLI_set_all_default_attr_print();
 	void CLI_disable_all_default_attr_print();

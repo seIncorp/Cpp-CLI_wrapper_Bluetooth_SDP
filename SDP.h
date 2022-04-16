@@ -548,6 +548,19 @@ namespace A2DP
 
 namespace AVRCP
 {
+	
+
+	/*std::string text_AVRC_AVRCC[] = {
+		"Category 1\n",
+		"Category 2\n",
+		"Category 3\n",
+		"Category 4\n",
+		"Supports browsing\n",
+		"Supports Cover Art GetImageProperties feature\n",
+		"Supports Cover Art GetImage feature\n",
+		"Supports Cover Art GetLinkedThumbnail feature\n"
+	};*/
+	
 	public ref struct CLI_SUPPORTED_FEATURES_DATA
 	{
 		ref struct CLI_AVRCT
@@ -575,52 +588,80 @@ namespace AVRCP
 			BYTE a9;
 		};
 
-		CLI_AVRCT avrct;
-		CLI_AVRC_AVRCC avrc_avrcc;
+		CLI_AVRCT^ avrct;
+		CLI_AVRC_AVRCC^ avrc_avrcc;
 
-
-		std::string getSupportedFeaturesString_AVRC_AVRCC()
+		array<System::String^>^ Test1()
 		{
-			std::string temp = "";
+			array< System::String^ >^ local = gcnew array< System::String^ >(8);
 
-			if (avrc_avrcc.a0)
+			local[0] = "Category 1\n";
+			local[1] = "Category 2\n";
+			local[2] = "Category 3\n";
+			local[3] = "Category 4\n";
+			local[4] = "Supports browsing\n";
+			local[5] = "Supports Cover Art GetImageProperties feature\n";
+			local[6] = "Supports Cover Art GetImage feature\n";
+			local[7] = "Supports Cover Art GetLinkedThumbnail feature\n";
+
+			return local;
+		}
+
+		//std::string getSupportedFeaturesString_AVRC_AVRCC()
+		System::String^ getSupportedFeaturesString_AVRC_AVRCC()
+		{
+			array<System::String^>^ text_AVRC_AVRCC = Test1();
+
+			//std::string temp = "";
+			System::String^ temp = "";
+
+			if (avrc_avrcc->a0)
 			{
-				temp.append("Category 1\n");
+				//temp.append("Category 1\n");
+				//temp += text_AVRC_AVRCC[0];
+				temp->Concat(text_AVRC_AVRCC[0]);
 			}
 
-			if (avrc_avrcc.a1)
+			if (avrc_avrcc->a1)
 			{
-				temp.append("Category 2\n");
+				//temp.append("Category 2\n");
+				temp->Concat(text_AVRC_AVRCC[1]);
 			}
 
-			if (avrc_avrcc.a2)
+			if (avrc_avrcc->a2)
 			{
-				temp.append("Category 3\n");
+				//temp.append("Category 3\n");
+				temp->Concat(text_AVRC_AVRCC[2]);
 			}
 
-			if (avrc_avrcc.a3)
+			if (avrc_avrcc->a3)
 			{
-				temp.append("Category 4\n");
+				//temp.append("Category 4\n");
+				temp->Concat(text_AVRC_AVRCC[3]);
 			}
 
-			if (avrc_avrcc.a6)
+			if (avrc_avrcc->a6)
 			{
-				temp.append("Supports browsing\n");
+				//temp.append("Supports browsing\n");
+				temp->Concat(text_AVRC_AVRCC[4]);
 			}
 
-			if (avrc_avrcc.a7)
+			if (avrc_avrcc->a7)
 			{
-				temp.append("Supports Cover Art GetImageProperties feature\n");
+				//temp.append("Supports Cover Art GetImageProperties feature\n");
+				temp->Concat(text_AVRC_AVRCC[5]);
 			}
 
-			if (avrc_avrcc.a8)
+			if (avrc_avrcc->a8)
 			{
-				temp.append("Supports Cover Art GetImage feature\n");
+				//temp.append("Supports Cover Art GetImage feature\n");
+				temp->Concat(text_AVRC_AVRCC[6]);
 			}
 
-			if (avrc_avrcc.a9)
+			if (avrc_avrcc->a9)
 			{
-				temp.append("Supports Cover Art GetLinkedThumbnail feature\n");
+				//temp.append("Supports Cover Art GetLinkedThumbnail feature\n");
+				temp->Concat(text_AVRC_AVRCC[7]);
 			}
 
 			return temp;
@@ -630,47 +671,47 @@ namespace AVRCP
 		{
 			std::string temp = "";
 
-			if (avrct.a0)
+			if (avrct->a0)
 			{
 				temp.append("Category 1\n");
 			}
 
-			if (avrct.a1)
+			if (avrct->a1)
 			{
 				temp.append("Category 2\n");
 			}
 
-			if (avrct.a2)
+			if (avrct->a2)
 			{
 				temp.append("Category 3\n");
 			}
 
-			if (avrct.a3)
+			if (avrct->a3)
 			{
 				temp.append("Category 4\n");
 			}
 
-			if (avrct.a4)
+			if (avrct->a4)
 			{
 				temp.append("Player Application Settings\n");
 			}
 
-			if (avrct.a5)
+			if (avrct->a5)
 			{
 				temp.append("Group Navigation\n");
 			}
 
-			if (avrct.a6)
+			if (avrct->a6)
 			{
 				temp.append("Supports browsing\n");
 			}
 
-			if (avrct.a7)
+			if (avrct->a7)
 			{
 				temp.append("Supports multiple media player applications\n");
 			}
 
-			if (avrct.a8)
+			if (avrct->a8)
 			{
 				temp.append("Supports Cover Art\n");
 			}
@@ -700,19 +741,34 @@ namespace AVRCP
 
 			Console::WriteLine("{0} 0x{1:X4}", VALUE_7, VALUE.supported_features_value);
 
+			Console::WriteLine("--> {0}", VALUE.sfds->avrc_avrcc->a1);
+
+			
+			//Console::WriteLine("--> {0} - {1}", 1,//VALUE.sfds->avrc_avrcc->a0, 
+			//	((SDP::AVRCP::AVRCP_EXPORT_S*)&dd.exported_data.avrcp_export)->supported_features_handle_export->VALUE.sfds->avrc_avrcc->a0
+			//);
+			//Console::WriteLine("--> {0} - {1}", 1, //VALUE.sfds->avrc_avrcc->a1,
+			//	((SDP::AVRCP::AVRCP_EXPORT_S*)&dd.exported_data.avrcp_export)->supported_features_handle_export->VALUE.sfds->avrc_avrcc->a1);
+			//Console::WriteLine("--> {0} - {1}", 1, //VALUE.sfds->avrc_avrcc->a2,
+			//	((SDP::AVRCP::AVRCP_EXPORT_S*)&dd.exported_data.avrcp_export)->supported_features_handle_export->VALUE.sfds->avrc_avrcc->a2);
 
 			// TODO: uredi to text-ovno tezavo
 
 			// TODO: najdi boljso resitev, ker se pri klicu printVALUE_ELEMENT() value spremeni na random
 			//v.sfds->avrct = (CLI_SUPPORTED_FEATURES_DATA::AVRCT_S^)&VALUE.supported_features_value;
 
-			if (dd.temp_class_id == SDP::A_V_RemoteControlTarget)
-				printf("%s\n", v.sfds->getSupportedFeaturesString_AVRCT().c_str());
+			//if (dd.temp_class_id == SDP::A_V_RemoteControlTarget)
+			//{
+			//	System::String aaa = 
+				//Console::WriteLine(VALUE.sfds->getSupportedFeaturesString_AVRCT());
+			//	//printf("%s\n", VALUE.sfds->getSupportedFeaturesString_AVRCT().c_str());
+			//}
 
-			if (dd.temp_class_id == SDP::A_V_RemoteControl ||
-				dd.temp_class_id == SDP::A_V_RemoteControlController
-				)
-				printf("%s\n", v.sfds->getSupportedFeaturesString_AVRC_AVRCC().c_str());
+			//if (dd.temp_class_id == SDP::A_V_RemoteControl ||
+			//	dd.temp_class_id == SDP::A_V_RemoteControlController
+			//	)
+			//	Console::WriteLine(VALUE.sfds->getSupportedFeaturesString_AVRC_AVRCC());
+			//	//printf("%s\n", VALUE.sfds->getSupportedFeaturesString_AVRC_AVRCC().c_str());
 		};
 	};
 }
@@ -1135,7 +1191,7 @@ namespace PNPINFO
 
 
 
-
+// TODO: prestavi v private class part
 // ni samo za default attributes
 template<class A, class B>
 void save_default_data_of_attr(A main, IOCTL_S::DEFAULT_DATA* dd, B locale)
@@ -1173,7 +1229,7 @@ void save_default_data_of_attr(A main, IOCTL_S::DEFAULT_DATA* dd, B locale)
 
 
 
-
+// TODO: prestavi v en namespace
 
 public ref struct CLI_MAP_EXPORT
 {

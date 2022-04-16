@@ -59,7 +59,41 @@ void CLI_DEFAULT_DATA::save_exported_data_AVRCP()
 		avrcp_export->supported_features_handle_export->VALUE.supported_features_value = ((SDP::AVRCP::AVRCP_EXPORT_S*)dd->exported_data.avrcp_export)->supported_features_handle_export->VALUE.supported_features_value;
 
 		// TODO: dodaj se za sfds, ker trenutno zaradi text-a ni narejeno
+		avrcp_export->supported_features_handle_export->VALUE.sfds = gcnew AVRCP::CLI_SUPPORTED_FEATURES_DATA();
+		avrcp_export->supported_features_handle_export->VALUE.sfds->avrc_avrcc = gcnew AVRCP::CLI_SUPPORTED_FEATURES_DATA::CLI_AVRC_AVRCC();
+		avrcp_export->supported_features_handle_export->VALUE.sfds->avrct = gcnew AVRCP::CLI_SUPPORTED_FEATURES_DATA::CLI_AVRCT();
 
+		if (((SDP::AVRCP::AVRCP_EXPORT_S*)dd->exported_data.avrcp_export)->supported_features_handle_export->VALUE.sfds->avrc_avrcc == NULL)
+		{
+			Console::WriteLine("avrc_avrcc PRAZNO!!!!!");
+			
+			
+			
+avrcp_export->supported_features_handle_export->VALUE.sfds->avrc_avrcc->a0 = ((SDP::AVRCP::AVRCP_EXPORT_S*)dd->exported_data.avrcp_export)->supported_features_handle_export->VALUE.sfds->avrc_avrcc->a0;
+avrcp_export->supported_features_handle_export->VALUE.sfds->avrc_avrcc->a1 = ((SDP::AVRCP::AVRCP_EXPORT_S*)dd->exported_data.avrcp_export)->supported_features_handle_export->VALUE.sfds->avrc_avrcc->a1;
+avrcp_export->supported_features_handle_export->VALUE.sfds->avrc_avrcc->a2 = ((SDP::AVRCP::AVRCP_EXPORT_S*)dd->exported_data.avrcp_export)->supported_features_handle_export->VALUE.sfds->avrc_avrcc->a2;
+avrcp_export->supported_features_handle_export->VALUE.sfds->avrc_avrcc->a3 = ((SDP::AVRCP::AVRCP_EXPORT_S*)dd->exported_data.avrcp_export)->supported_features_handle_export->VALUE.sfds->avrc_avrcc->a3;
+avrcp_export->supported_features_handle_export->VALUE.sfds->avrc_avrcc->a6 = ((SDP::AVRCP::AVRCP_EXPORT_S*)dd->exported_data.avrcp_export)->supported_features_handle_export->VALUE.sfds->avrc_avrcc->a6;
+avrcp_export->supported_features_handle_export->VALUE.sfds->avrc_avrcc->a7 = ((SDP::AVRCP::AVRCP_EXPORT_S*)dd->exported_data.avrcp_export)->supported_features_handle_export->VALUE.sfds->avrc_avrcc->a7;
+avrcp_export->supported_features_handle_export->VALUE.sfds->avrc_avrcc->a8 = ((SDP::AVRCP::AVRCP_EXPORT_S*)dd->exported_data.avrcp_export)->supported_features_handle_export->VALUE.sfds->avrc_avrcc->a8;
+avrcp_export->supported_features_handle_export->VALUE.sfds->avrc_avrcc->a9 = ((SDP::AVRCP::AVRCP_EXPORT_S*)dd->exported_data.avrcp_export)->supported_features_handle_export->VALUE.sfds->avrc_avrcc->a9;
+		}
+
+		if (((SDP::AVRCP::AVRCP_EXPORT_S*)dd->exported_data.avrcp_export)->supported_features_handle_export->VALUE.sfds->avrct == nullptr)
+		{
+			Console::WriteLine("avrct PRAZNO!!!!!");
+
+			//avrcp_export->supported_features_handle_export->VALUE.sfds->avrct.a0 = ((SDP::AVRCP::AVRCP_EXPORT_S*)dd->exported_data.avrcp_export)->supported_features_handle_export->VALUE.sfds->avrct->a0;
+			//avrcp_export->supported_features_handle_export->VALUE.sfds->avrct.a1 = ((SDP::AVRCP::AVRCP_EXPORT_S*)dd->exported_data.avrcp_export)->supported_features_handle_export->VALUE.sfds->avrct->a1;
+			//avrcp_export->supported_features_handle_export->VALUE.sfds->avrct.a2 = ((SDP::AVRCP::AVRCP_EXPORT_S*)dd->exported_data.avrcp_export)->supported_features_handle_export->VALUE.sfds->avrct->a2;
+			//avrcp_export->supported_features_handle_export->VALUE.sfds->avrct.a3 = ((SDP::AVRCP::AVRCP_EXPORT_S*)dd->exported_data.avrcp_export)->supported_features_handle_export->VALUE.sfds->avrct->a3;
+			//avrcp_export->supported_features_handle_export->VALUE.sfds->avrct.a4 = ((SDP::AVRCP::AVRCP_EXPORT_S*)dd->exported_data.avrcp_export)->supported_features_handle_export->VALUE.sfds->avrct->a4;
+			//avrcp_export->supported_features_handle_export->VALUE.sfds->avrct.a5 = ((SDP::AVRCP::AVRCP_EXPORT_S*)dd->exported_data.avrcp_export)->supported_features_handle_export->VALUE.sfds->avrct->a5;
+			//avrcp_export->supported_features_handle_export->VALUE.sfds->avrct.a6 = ((SDP::AVRCP::AVRCP_EXPORT_S*)dd->exported_data.avrcp_export)->supported_features_handle_export->VALUE.sfds->avrct->a6;
+			//avrcp_export->supported_features_handle_export->VALUE.sfds->avrct.a7 = ((SDP::AVRCP::AVRCP_EXPORT_S*)dd->exported_data.avrcp_export)->supported_features_handle_export->VALUE.sfds->avrct->a7;
+			//avrcp_export->supported_features_handle_export->VALUE.sfds->avrct.a8 = ((SDP::AVRCP::AVRCP_EXPORT_S*)dd->exported_data.avrcp_export)->supported_features_handle_export->VALUE.sfds->avrct->a8;
+
+		}
 	}
 
 	print_data_AVRCP();
