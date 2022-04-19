@@ -131,6 +131,7 @@ You have more options:
 
 # Examples 
 ### Connection and disconnection from local radio
+#### Code
 ```
 // 1. you must create class instance
 CLI_DEFAULT_DATA data = new CLI_DEFAULT_DATA();
@@ -141,6 +142,7 @@ data.CLI_closeConnectionToDevice();
 ```
 
 ### Getting list of previously searched devices and export/print data
+#### Code
 ```
 // 1. you must create class instance
 CLI_DEFAULT_DATA data = new CLI_DEFAULT_DATA();
@@ -163,8 +165,21 @@ Console.WriteLine("{0}",data.cached_devices.devices[0].name);
 // 4. close the connection
 data.CLI_closeConnectionToDevice();
 ```
+#### Response
+```
+*********** DEVICES *************
+NUM: 8
+************************
+NAME: Nexus 6
+FLAGS: 18335
+ADDRESS: 44:80:EB:EF:D2:CE
+.
+.
+.
+```
 
 ### Getting all data of local bluetooth radio
+#### Code
 ```
 // 1. you must create class instance
 CLI_DEFAULT_DATA data = new CLI_DEFAULT_DATA();
@@ -185,5 +200,55 @@ data.CLI_getLocalBthInfo();
 Console.WriteLine("{0}",data.local_device_radio.radio.LMP_major_version);
 
 // 4. close the connection
+data.CLI_closeConnectionToDevice();
+```
+#### Response
+```
+LOCAL DEVICE and RADIO DATA:
+        Flags: 2
+        Version: 6.8891 (Major.Minor version HCI)
+        Name: DESKTOP-HJ6NMIA
+ADDRESS: XX:XX:XX:XX:XX:XX
+FLAGS: 7
+        DEVICE COD data:
+                Major service class:
+                        Networking (LAN, Ad hoc, ...)
+                        Capturing (Scanner, Microphone, ...)
+                        Audio (Speaker, Microphone, Headset service, ...)
+                Major device class:
+                        Computer (desktop,notebook, PDA, organizers, .... )
+                Minor device class:
+                        Desktop workstation
+
+        RADIO DATA:
+                LMP version: 6.8891
+                LMP Supported Features: 875BFFDBFE8FFFFF
+                ID of the manufacturer: 10
+```
+
+### Getting one SDP service data (searching, printing and exporting)
+#### Code
+```
+// 1. you must create class instance
+CLI_DEFAULT_DATA data = new CLI_DEFAULT_DATA();
+
+// 2.1 if you want to print it in console you must set
+data.sdp_settings.print = 1;
+
+// 3.1 good practice (reseting to FALSE all settings)
+data.CLI_reset_SDP_service_for_search();      
+data.CLI_reset_attr_search_for_service();
+
+// 3.2 enabling AudioSource service for searching on device and enabling all attributes to search
+data.CLI_set_SDP_service_for_search((short)CLI_SERVICE_CLASS_ID.AudioSource);
+data.CLI_set_all_attr_of_SDP_service_for_search();
+
+// 4. call CLI_connectToDevice to connect to local bluetooth radio
+data.CLI_connectToDevice("\\\\?\\GLOBALROOT\\Device\\USBPDO-4");
+
+// 5. calling CLI_SDPsearch() function with device bluetooth address
+data.CLI_SDPsearch("A8:B8:6E:E7:5A:B6");
+
+// . close the connection
 data.CLI_closeConnectionToDevice();
 ```
