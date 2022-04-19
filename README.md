@@ -131,7 +131,9 @@ You have more options:
 
 # Examples 
 ### Connection and disconnection from local radio
-```CLI_DEFAULT_DATA data = new CLI_DEFAULT_DATA();
+```
+CLI_DEFAULT_DATA data = new CLI_DEFAULT_DATA();
 data.CLI_connectToDevice("\\\\?\\GLOBALROOT\\Device\\USBPDO-4");
-data.CLI_closeConnectionToDevice();```
+data.CLI_closeConnectionToDevice();
+```
 
