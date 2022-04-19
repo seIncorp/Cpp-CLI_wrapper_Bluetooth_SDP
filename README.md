@@ -1,11 +1,11 @@
 # Cpp-CLI_wrapper_Bluetooth_SDP
- C++/CLI wrapper of Bluetooth_SDP_data_DLL for C# and .NET.
+C++/CLI wrapper of Bluetooth_SDP_data_DLL for C# and .NET.
 
- Here you have managed code (APIs) from native C++ unmanaged code (APIs).
+Here you have managed code (APIs) from native C++ unmanaged code (APIs).
 
- # How to use it
- ## Included headers and libraries for using dll
- - stdio.h
+# How to use it
+## Included headers and libraries for using dll
+- stdio.h
 - vector
 - iostream
 - winsock2.h
@@ -124,6 +124,14 @@ DLL wrapper have next functions:
 > Through void CLI_set_all_SDP_service_for_search(), void CLI_set_SDP_service_for_search(Int16 service) and void CLI_disable_SDP_service_for_search(Int16 service)
 > you can set TRUE or false
 
+# How to use it on client app
+You have more options:
+1. in project add as new reference for "Cpp-CLI_wrapper_Bluetooth_SDP.dll"
+2. copy&paste "Cpp-CLI_wrapper_Bluetooth_SDP.dll" to your app project
 
 # Examples 
+### Connection and disconnection from local radio
+```CLI_DEFAULT_DATA data = new CLI_DEFAULT_DATA();
+data.CLI_connectToDevice("\\\\?\\GLOBALROOT\\Device\\USBPDO-4");
+data.CLI_closeConnectionToDevice();```
 
