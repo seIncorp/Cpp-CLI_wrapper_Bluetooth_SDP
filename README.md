@@ -144,14 +144,46 @@ data.CLI_closeConnectionToDevice();
 ```
 // 1. you must create class instance
 CLI_DEFAULT_DATA data = new CLI_DEFAULT_DATA();
+
 // 2. call CLI_connectToDevice to connect to local bluetooth radio
 data.CLI_connectToDevice("\\\\?\\GLOBALROOT\\Device\\USBPDO-4");
+
 // 3.1 if you want to print it in console you must set
 data.sdp_settings.print = 1;
+
 // 3.2 calling driver to return list of devices
 data.CLI_getBthDeviceInfo();
+
+// 3.1.1 or if you have disabled data.sdp_settings.print you can use
+// data.cached_devices.print();
+
 // 3.3 exporting data
 Console.WriteLine("{0}",data.cached_devices.devices[0].name);
+
+// 4. close the connection
+data.CLI_closeConnectionToDevice();
+```
+
+### Getting all data of local bluetooth radio
+```
+// 1. you must create class instance
+CLI_DEFAULT_DATA data = new CLI_DEFAULT_DATA();
+
+// 2. call CLI_connectToDevice to connect to local bluetooth radio
+data.CLI_connectToDevice("\\\\?\\GLOBALROOT\\Device\\USBPDO-4");
+
+// 3.1 if you want to print it in console you must set
+data.sdp_settings.print = 1;
+
+// 3.2 calling local radio driver
+data.CLI_getLocalBthInfo();
+
+// 3.1.1 or if you have disabled data.sdp_settings.print you can use
+// data.local_device_radio.print();
+
+// 3.3 exporting data
+Console.WriteLine("{0}",data.local_device_radio.radio.LMP_major_version);
+
 // 4. close the connection
 data.CLI_closeConnectionToDevice();
 ```
