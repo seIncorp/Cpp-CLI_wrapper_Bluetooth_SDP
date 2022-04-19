@@ -7,17 +7,23 @@
 
 void CLI_DEFAULT_DATA::delete_exported_data_A2DP()
 {
-	delete_exported_data_DEFAULT<CLI_EXPORTS::CLI_A2DP_EXPORT^>(a2dp_export);
-
-	if (a2dp_export->supported_features_handle_export->VALUE.sfds != nullptr)
-		delete a2dp_export->supported_features_handle_export->VALUE.sfds;
-
-	delete_default_data_of_attr<A2DP::CLI_SUPPORTED_FEATURES^>(a2dp_export->supported_features_handle_export);
-	if (a2dp_export->supported_features_handle_export != nullptr)
-		delete a2dp_export->supported_features_handle_export;
-
 	if (a2dp_export != nullptr)
+	{
+		delete_exported_data_DEFAULT<CLI_EXPORTS::CLI_A2DP_EXPORT^>(a2dp_export);
+
+
+		if (a2dp_export->supported_features_handle_export != nullptr)
+		{
+			if (a2dp_export->supported_features_handle_export->VALUE.sfds != nullptr)
+				delete a2dp_export->supported_features_handle_export->VALUE.sfds;
+
+			delete_default_data_of_attr<A2DP::CLI_SUPPORTED_FEATURES^>(a2dp_export->supported_features_handle_export);
+			//if (a2dp_export->supported_features_handle_export != nullptr)
+			delete a2dp_export->supported_features_handle_export;
+		}
+
 		delete a2dp_export;
+	}
 }
 
 void CLI_DEFAULT_DATA::delete_exported_data_AVRCP()

@@ -247,8 +247,43 @@ data.CLI_set_all_attr_of_SDP_service_for_search();
 data.CLI_connectToDevice("\\\\?\\GLOBALROOT\\Device\\USBPDO-4");
 
 // 5. calling CLI_SDPsearch() function with device bluetooth address
-data.CLI_SDPsearch("A8:B8:6E:E7:5A:B6");
+data.CLI_SDPsearch("XX:XX:XX:XX:XX:XX");
 
-// . close the connection
+// 6. exporting data
+
+
+// 7. close the connection
 data.CLI_closeConnectionToDevice();
+```
+
+#### Response
+```
+************************************************
+RECORD HANDLE:
+ATTRIBUTE ID:
+Type: [1]
+Size: 2 Bytes [2]
+Value: 0x0000
+VALUE ELEMENT:
+Type:  [1]
+Size: 4 Bytes [4]
+Value: 0x00010006
+Record handle: 0x00010006
+
+************************************************
+CLASS ID:
+ATTRIBUTE ID:
+Type: [1]
+Size: 2 Bytes [2]
+Value: 0x0001
+VALUE ELEMENT:
+Type:  [6]
+Additional size: 1
+Data size: 3
+Value:
+0x19 0x11 0x0A
+Class ID [0]: 0x110A
+.
+.
+.
 ```

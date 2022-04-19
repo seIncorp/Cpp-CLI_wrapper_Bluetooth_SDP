@@ -372,6 +372,10 @@ public ref struct CLI_SDP_settings
 	- PREVERI: preveri vsak attr posebej pri searchenju
 	- DODAJ: preveri ali je kaksen attr. enabled za search drugace se ne sme izvesti SDP  in isto za service, ker drugace je error
 	- DODAJ: se za PANU service
+	- PREVERI/DODAJ/POPRAVI: app javi da ni kompatibilno VALUE ko se exporta iz objekta (resitev: kreiranje instance objekta in potem dodajanje podatkov, uredi tudi brisanje tega)
+	(resitev: glej SERVICE_NAME exportanje in naredi na vseh ostalih takole)
+	- POPRAVI: vrstni red brisanja pointerjev (example: glej delete_exported_data_A2DP)
+
 
 	- PREVERI: A_V_RemoteControlTarget in A_V_RemoteControlController <-- zakaj ne vrne, kje tezava v native ali tukaj <-- DONE !!
 	- UREDI: da se pri shranjevanju exported tudi preveri ali sploh obstajajo podatki	<-- DONE !!
@@ -711,13 +715,47 @@ private:
 		{
 			main->default_export->service_name_handle_export = gcnew CLI_DEFAULT::CLI_SERVICE_NAME();
 
-			save_default_data_of_attr<CLI_DEFAULT::CLI_SERVICE_NAME^, SDP::SERVICE_NAME*>(
+			main->default_export->service_name_handle_export->VALUE = gcnew CLI_DEFAULT::CLI_SERVICE_NAME::VV();
+			main->default_export->service_name_handle_export->VALUE->service_name = gcnew System::String("DELA TOLE!!!");
+
+			/*save_default_data_of_attr<CLI_DEFAULT::CLI_SERVICE_NAME^, SDP::SERVICE_NAME*>(
 				main->default_export->service_name_handle_export,
 				dd,
 				((B)submain)->default_export->service_name_handle_export
-				);
+				);*/
+			
 
-			main->default_export->service_name_handle_export->VALUE.service_name = gcnew System::String(((B)submain)->default_export->service_name_handle_export->VALUE.service_name);
+			main->default_export->service_name_handle_export->attr_id = gcnew CLI_ATTR_ID();
+
+			main->default_export->service_name_handle_export->attr_id->size_bytes = ((B)submain)->default_export->service_name_handle_export->attr_id->size_bytes;
+			main->default_export->service_name_handle_export->attr_id->additional_bits_flag = ((B)submain)->default_export->service_name_handle_export->attr_id->additional_bits_flag;
+			main->default_export->service_name_handle_export->attr_id->additional_bits_for_size = ((B)submain)->default_export->service_name_handle_export->attr_id->additional_bits_for_size;
+
+			main->default_export->service_name_handle_export->attr_id->element = gcnew CLI_ATTRIBUTE_ID_ELEMENT();
+			main->default_export->service_name_handle_export->attr_id->element->element.size = ((B)submain)->default_export->service_name_handle_export->attr_id->element->element.size;
+			main->default_export->service_name_handle_export->attr_id->element->element.type = ((B)submain)->default_export->service_name_handle_export->attr_id->element->element.type;
+
+			main->default_export->service_name_handle_export->attr_id->value = gcnew array< BYTE^ >(((B)submain)->default_export->service_name_handle_export->attr_id->size_bytes);
+
+			for (int i = 0; i < ((B)submain)->default_export->service_name_handle_export->attr_id->size_bytes; i++)
+				main->default_export->service_name_handle_export->attr_id->value[i] = ((B)submain)->default_export->service_name_handle_export->attr_id->value[i];
+
+			main->default_export->service_name_handle_export->VALUE->element = gcnew CLI_ATTRIBUTE_ID_ELEMENT();
+			main->default_export->service_name_handle_export->VALUE->element->element.size = ((B)submain)->default_export->service_name_handle_export->VALUE.element->element.size;
+			main->default_export->service_name_handle_export->VALUE->element->element.type = ((B)submain)->default_export->service_name_handle_export->VALUE.element->element.type;
+
+			main->default_export->service_name_handle_export->VALUE->size_bytes = ((B)submain)->default_export->service_name_handle_export->VALUE.size_bytes;
+			main->default_export->service_name_handle_export->VALUE->additional_bits_flag = ((B)submain)->default_export->service_name_handle_export->VALUE.additional_bits_flag;
+			main->default_export->service_name_handle_export->VALUE->additional_bits_for_size = ((B)submain)->default_export->service_name_handle_export->VALUE.additional_bits_for_size;
+			main->default_export->service_name_handle_export->VALUE->size_bytes_additional = ((B)submain)->default_export->service_name_handle_export->VALUE.size_bytes_additional;
+
+			main->default_export->service_name_handle_export->VALUE->value = gcnew array< BYTE^ >(((B)submain)->default_export->service_name_handle_export->VALUE.size_bytes);
+
+			for (int i = 0; i < ((B)submain)->default_export->service_name_handle_export->VALUE.size_bytes; i++)
+				main->default_export->service_name_handle_export->VALUE->value[i] = ((B)submain)->default_export->service_name_handle_export->VALUE.value[i];
+
+
+			main->default_export->service_name_handle_export->VALUE->service_name = gcnew System::String(((B)submain)->default_export->service_name_handle_export->VALUE.service_name);
 		}
 
 		//  BLUETOOTH_PROFILE_DESCRIPTOR_LIST
@@ -917,10 +955,13 @@ private:
 
 		if (main->default_export->service_name_handle_export != nullptr)
 		{
-			if (main->default_export->service_name_handle_export->VALUE.service_name != nullptr)
-				delete main->default_export->service_name_handle_export->VALUE.service_name;
+			if (main->default_export->service_name_handle_export->VALUE->service_name != nullptr)
+				delete main->default_export->service_name_handle_export->VALUE->service_name;
 
-			delete_default_data_of_attr<CLI_DEFAULT::CLI_SERVICE_NAME^>(main->default_export->service_name_handle_export);
+			//delete_default_data_of_attr<CLI_DEFAULT::CLI_SERVICE_NAME^>(main->default_export->service_name_handle_export);
+
+			if (main->default_export->service_name_handle_export->VALUE != nullptr)
+				delete main->default_export->service_name_handle_export->VALUE;
 
 			delete main->default_export->service_name_handle_export;
 		}

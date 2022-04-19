@@ -473,8 +473,10 @@ namespace CLI_DEFAULT
 			System::String^ service_name;
 
 
-		} VALUE;
+		} ;
+		//} VALUE;
 
+		VV^ VALUE;
 		template<class T>
 		void print(T v, IOCTL_S::DEFAULT_DATA dd)
 		{
@@ -485,7 +487,7 @@ namespace CLI_DEFAULT
 			printVALUE_ELEMENT(v, dd);
 
 			Console::Write("Service name: ");
-			Console::Write(VALUE.service_name);
+			Console::Write(VALUE->service_name);
 			Console::WriteLine("");
 		}
 	};
