@@ -11,7 +11,7 @@
 
 void CLI_DEFAULT_DATA::print_data_A2DP()
 {
-	print_data_DEFAULT<CLI_A2DP_EXPORT^,  SDP::A2DP::A2DP_EXPORT_S*>(a2dp_export, dd->exported_data.a2dp_export);
+	print_data_DEFAULT<CLI_EXPORTS::CLI_A2DP_EXPORT^,  SDP::A2DP::A2DP_EXPORT_S*>(a2dp_export, dd->exported_data.a2dp_export);
 	
 	if (((SDP::A2DP::A2DP_EXPORT_S*)dd->exported_data.a2dp_export)->supported_features_handle_export != NULL)
 		if (sdp_settings->print == 1 || sdp_settings->print_service.print_A2DP_attributes.print_supported_features == 1)
@@ -21,7 +21,7 @@ void CLI_DEFAULT_DATA::print_data_A2DP()
 
 void CLI_DEFAULT_DATA::print_data_AVRCP()
 {
-	print_data_DEFAULT<CLI_AVRCP_EXPORT^, SDP::AVRCP::AVRCP_EXPORT_S*>(avrcp_export, dd->exported_data.avrcp_export);
+	print_data_DEFAULT<CLI_EXPORTS::CLI_AVRCP_EXPORT^, SDP::AVRCP::AVRCP_EXPORT_S*>(avrcp_export, dd->exported_data.avrcp_export);
 
 	if (((SDP::AVRCP::AVRCP_EXPORT_S*)dd->exported_data.avrcp_export)->supported_features_handle_export != NULL)
 		if (sdp_settings->print == 1 || 
@@ -34,7 +34,7 @@ void CLI_DEFAULT_DATA::print_data_AVRCP()
 
 void CLI_DEFAULT_DATA::print_data_MAP()
 {
-	print_data_DEFAULT<CLI_MAP_EXPORT^, SDP::MAP::MAP_EXPORT_S*>(map_export, dd->exported_data.map_export);
+	print_data_DEFAULT<CLI_EXPORTS::CLI_MAP_EXPORT^, SDP::MAP::MAP_EXPORT_S*>(map_export, dd->exported_data.map_export);
 
 	if (((SDP::MAP::MAP_EXPORT_S*)dd->exported_data.map_export)->goepl2cappsm_handle_export != NULL)
 		if(sdp_settings->print == 1 || sdp_settings->print_service.print_MAP_attributes.print_goepl2cappsm == 1)
@@ -55,7 +55,7 @@ void CLI_DEFAULT_DATA::print_data_MAP()
 
 void CLI_DEFAULT_DATA::print_data_HFP()
 {
-	print_data_DEFAULT<CLI_HFP_EXPORT^, SDP::HFP::HFP_EXPORT_S*>(hfp_export, dd->exported_data.hfp_export);
+	print_data_DEFAULT<CLI_EXPORTS::CLI_HFP_EXPORT^, SDP::HFP::HFP_EXPORT_S*>(hfp_export, dd->exported_data.hfp_export);
 
 	if (((SDP::HFP::HFP_EXPORT_S*)dd->exported_data.hfp_export)->network_handle_export != NULL)
 		if (sdp_settings->print == 1 || 
@@ -74,7 +74,7 @@ void CLI_DEFAULT_DATA::print_data_HFP()
 
 void CLI_DEFAULT_DATA::print_data_HSP()
 {
-	print_data_DEFAULT<CLI_HSP_EXPORT^, SDP::HSP::HSP_EXPORT_S*>(hsp_export, dd->exported_data.hsp_export);
+	print_data_DEFAULT<CLI_EXPORTS::CLI_HSP_EXPORT^, SDP::HSP::HSP_EXPORT_S*>(hsp_export, dd->exported_data.hsp_export);
 
 	if (((SDP::HSP::HSP_EXPORT_S*)dd->exported_data.hsp_export)->remote_audio_volume_control_handle_export != NULL)
 		if (sdp_settings->print == 1 || 
@@ -86,7 +86,7 @@ void CLI_DEFAULT_DATA::print_data_HSP()
 
 void CLI_DEFAULT_DATA::print_data_NAP()
 {
-	print_data_DEFAULT<CLI_NAP_EXPORT^, SDP::NAP::NAP_EXPORT_S*>(nap_export, dd->exported_data.nap_export);
+	print_data_DEFAULT<CLI_EXPORTS::CLI_NAP_EXPORT^, SDP::NAP::NAP_EXPORT_S*>(nap_export, dd->exported_data.nap_export);
 
 	if (((SDP::NAP::NAP_EXPORT_S*)dd->exported_data.nap_export)->security_description_handle_export != NULL)
 		if (sdp_settings->print == 1 || sdp_settings->print_service.print_NAP_attributes.print_security_description == 1)
@@ -103,7 +103,7 @@ void CLI_DEFAULT_DATA::print_data_NAP()
 
 void CLI_DEFAULT_DATA::print_data_OBEX()
 {
-	print_data_DEFAULT<CLI_OBEX_EXPORT^, SDP::OBEX::OBEX_EXPORT_S*>(obex_export, dd->exported_data.obex_export);
+	print_data_DEFAULT<CLI_EXPORTS::CLI_OBEX_EXPORT^, SDP::OBEX::OBEX_EXPORT_S*>(obex_export, dd->exported_data.obex_export);
 
 	if (((SDP::OBEX::OBEX_EXPORT_S*)dd->exported_data.obex_export)->service_version_handle_export != NULL)
 		if (sdp_settings->print == 1 || sdp_settings->print_service.print_OBEX_attributes.print_service_version == 1)
@@ -120,7 +120,7 @@ void CLI_DEFAULT_DATA::print_data_OBEX()
 
 void CLI_DEFAULT_DATA::print_data_PBAP()
 {
-	print_data_DEFAULT<CLI_PBAP_EXPORT^, SDP::PBAP::PBAP_EXPORT_S*>(pbap_export, dd->exported_data.pbap_export);
+	print_data_DEFAULT<CLI_EXPORTS::CLI_PBAP_EXPORT^, SDP::PBAP::PBAP_EXPORT_S*>(pbap_export, dd->exported_data.pbap_export);
 
 	if (((SDP::PBAP::PBAP_EXPORT_S*)dd->exported_data.pbap_export)->supported_repositories_handle_export != NULL)
 		if (sdp_settings->print == 1 || sdp_settings->print_service.print_PBAP_attributes.print_supported_repositories == 1)

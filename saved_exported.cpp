@@ -9,10 +9,10 @@
 
 void CLI_DEFAULT_DATA::save_exported_data_A2DP()
 {
-	a2dp_export = gcnew CLI_A2DP_EXPORT();
+	a2dp_export = gcnew CLI_EXPORTS::CLI_A2DP_EXPORT();
 
 	// DEFAULT ATTR.
-	save_exported_data_DEFAULT<CLI_A2DP_EXPORT^, SDP::A2DP::A2DP_EXPORT_S*>(a2dp_export, dd->exported_data.a2dp_export);
+	save_exported_data_DEFAULT<CLI_EXPORTS::CLI_A2DP_EXPORT^, SDP::A2DP::A2DP_EXPORT_S*>(a2dp_export, dd->exported_data.a2dp_export);
 
 	//  SUPPORTED_FEATURES
 	if (((SDP::A2DP::A2DP_EXPORT_S*)dd->exported_data.a2dp_export)->supported_features_handle_export != NULL)
@@ -35,15 +35,14 @@ void CLI_DEFAULT_DATA::save_exported_data_A2DP()
 		a2dp_export->supported_features_handle_export->VALUE.sfds->a3 = ((SDP::A2DP::A2DP_EXPORT_S*)dd->exported_data.a2dp_export)->supported_features_handle_export->VALUE.sfds->repo->a3;
 	}
 
-	// TODO: dodaj se za printanje glede sdp_settingov
 	print_data_A2DP();
 }
 
 void CLI_DEFAULT_DATA::save_exported_data_AVRCP()
 {
-	avrcp_export = gcnew CLI_AVRCP_EXPORT();
+	avrcp_export = gcnew CLI_EXPORTS::CLI_AVRCP_EXPORT();
 
-	save_exported_data_DEFAULT<CLI_AVRCP_EXPORT^, SDP::AVRCP::AVRCP_EXPORT_S*>(avrcp_export, dd->exported_data.avrcp_export);
+	save_exported_data_DEFAULT<CLI_EXPORTS::CLI_AVRCP_EXPORT^, SDP::AVRCP::AVRCP_EXPORT_S*>(avrcp_export, dd->exported_data.avrcp_export);
 
 	//SUPPORTED_FEATURES
 	if (((SDP::AVRCP::AVRCP_EXPORT_S*)dd->exported_data.avrcp_export)->supported_features_handle_export != NULL)
@@ -58,41 +57,31 @@ void CLI_DEFAULT_DATA::save_exported_data_AVRCP()
 
 		avrcp_export->supported_features_handle_export->VALUE.supported_features_value = ((SDP::AVRCP::AVRCP_EXPORT_S*)dd->exported_data.avrcp_export)->supported_features_handle_export->VALUE.supported_features_value;
 
-		// TODO: dodaj se za sfds, ker trenutno zaradi text-a ni narejeno
 		avrcp_export->supported_features_handle_export->VALUE.sfds = gcnew AVRCP::CLI_SUPPORTED_FEATURES_DATA();
-		avrcp_export->supported_features_handle_export->VALUE.sfds->avrc_avrcc = gcnew AVRCP::CLI_SUPPORTED_FEATURES_DATA::CLI_AVRC_AVRCC();
-		avrcp_export->supported_features_handle_export->VALUE.sfds->avrct = gcnew AVRCP::CLI_SUPPORTED_FEATURES_DATA::CLI_AVRCT();
 
-		if (((SDP::AVRCP::AVRCP_EXPORT_S*)dd->exported_data.avrcp_export)->supported_features_handle_export->VALUE.sfds->avrc_avrcc == NULL)
+		if (((SDP::AVRCP::AVRCP_EXPORT_S*)dd->exported_data.avrcp_export)->supported_features_handle_export->VALUE.sfds->avrc_avrcc != nullptr)
 		{
-			Console::WriteLine("avrc_avrcc PRAZNO!!!!!");
-			
-			
-			
-avrcp_export->supported_features_handle_export->VALUE.sfds->avrc_avrcc->a0 = ((SDP::AVRCP::AVRCP_EXPORT_S*)dd->exported_data.avrcp_export)->supported_features_handle_export->VALUE.sfds->avrc_avrcc->a0;
-avrcp_export->supported_features_handle_export->VALUE.sfds->avrc_avrcc->a1 = ((SDP::AVRCP::AVRCP_EXPORT_S*)dd->exported_data.avrcp_export)->supported_features_handle_export->VALUE.sfds->avrc_avrcc->a1;
-avrcp_export->supported_features_handle_export->VALUE.sfds->avrc_avrcc->a2 = ((SDP::AVRCP::AVRCP_EXPORT_S*)dd->exported_data.avrcp_export)->supported_features_handle_export->VALUE.sfds->avrc_avrcc->a2;
-avrcp_export->supported_features_handle_export->VALUE.sfds->avrc_avrcc->a3 = ((SDP::AVRCP::AVRCP_EXPORT_S*)dd->exported_data.avrcp_export)->supported_features_handle_export->VALUE.sfds->avrc_avrcc->a3;
-avrcp_export->supported_features_handle_export->VALUE.sfds->avrc_avrcc->a6 = ((SDP::AVRCP::AVRCP_EXPORT_S*)dd->exported_data.avrcp_export)->supported_features_handle_export->VALUE.sfds->avrc_avrcc->a6;
-avrcp_export->supported_features_handle_export->VALUE.sfds->avrc_avrcc->a7 = ((SDP::AVRCP::AVRCP_EXPORT_S*)dd->exported_data.avrcp_export)->supported_features_handle_export->VALUE.sfds->avrc_avrcc->a7;
-avrcp_export->supported_features_handle_export->VALUE.sfds->avrc_avrcc->a8 = ((SDP::AVRCP::AVRCP_EXPORT_S*)dd->exported_data.avrcp_export)->supported_features_handle_export->VALUE.sfds->avrc_avrcc->a8;
-avrcp_export->supported_features_handle_export->VALUE.sfds->avrc_avrcc->a9 = ((SDP::AVRCP::AVRCP_EXPORT_S*)dd->exported_data.avrcp_export)->supported_features_handle_export->VALUE.sfds->avrc_avrcc->a9;
+			avrcp_export->supported_features_handle_export->VALUE.sfds->avrc_avrcc.a0 = ((SDP::AVRCP::AVRCP_EXPORT_S*)dd->exported_data.avrcp_export)->supported_features_handle_export->VALUE.sfds->avrc_avrcc->a0;
+			avrcp_export->supported_features_handle_export->VALUE.sfds->avrc_avrcc.a1 = ((SDP::AVRCP::AVRCP_EXPORT_S*)dd->exported_data.avrcp_export)->supported_features_handle_export->VALUE.sfds->avrc_avrcc->a1;
+			avrcp_export->supported_features_handle_export->VALUE.sfds->avrc_avrcc.a2 = ((SDP::AVRCP::AVRCP_EXPORT_S*)dd->exported_data.avrcp_export)->supported_features_handle_export->VALUE.sfds->avrc_avrcc->a2;
+			avrcp_export->supported_features_handle_export->VALUE.sfds->avrc_avrcc.a3 = ((SDP::AVRCP::AVRCP_EXPORT_S*)dd->exported_data.avrcp_export)->supported_features_handle_export->VALUE.sfds->avrc_avrcc->a3;
+			avrcp_export->supported_features_handle_export->VALUE.sfds->avrc_avrcc.a6 = ((SDP::AVRCP::AVRCP_EXPORT_S*)dd->exported_data.avrcp_export)->supported_features_handle_export->VALUE.sfds->avrc_avrcc->a6;
+			avrcp_export->supported_features_handle_export->VALUE.sfds->avrc_avrcc.a7 = ((SDP::AVRCP::AVRCP_EXPORT_S*)dd->exported_data.avrcp_export)->supported_features_handle_export->VALUE.sfds->avrc_avrcc->a7;
+			avrcp_export->supported_features_handle_export->VALUE.sfds->avrc_avrcc.a8 = ((SDP::AVRCP::AVRCP_EXPORT_S*)dd->exported_data.avrcp_export)->supported_features_handle_export->VALUE.sfds->avrc_avrcc->a8;
+			avrcp_export->supported_features_handle_export->VALUE.sfds->avrc_avrcc.a9 = ((SDP::AVRCP::AVRCP_EXPORT_S*)dd->exported_data.avrcp_export)->supported_features_handle_export->VALUE.sfds->avrc_avrcc->a9;
 		}
 
-		if (((SDP::AVRCP::AVRCP_EXPORT_S*)dd->exported_data.avrcp_export)->supported_features_handle_export->VALUE.sfds->avrct == nullptr)
+		if (((SDP::AVRCP::AVRCP_EXPORT_S*)dd->exported_data.avrcp_export)->supported_features_handle_export->VALUE.sfds->avrct != nullptr)
 		{
-			Console::WriteLine("avrct PRAZNO!!!!!");
-
-			//avrcp_export->supported_features_handle_export->VALUE.sfds->avrct.a0 = ((SDP::AVRCP::AVRCP_EXPORT_S*)dd->exported_data.avrcp_export)->supported_features_handle_export->VALUE.sfds->avrct->a0;
-			//avrcp_export->supported_features_handle_export->VALUE.sfds->avrct.a1 = ((SDP::AVRCP::AVRCP_EXPORT_S*)dd->exported_data.avrcp_export)->supported_features_handle_export->VALUE.sfds->avrct->a1;
-			//avrcp_export->supported_features_handle_export->VALUE.sfds->avrct.a2 = ((SDP::AVRCP::AVRCP_EXPORT_S*)dd->exported_data.avrcp_export)->supported_features_handle_export->VALUE.sfds->avrct->a2;
-			//avrcp_export->supported_features_handle_export->VALUE.sfds->avrct.a3 = ((SDP::AVRCP::AVRCP_EXPORT_S*)dd->exported_data.avrcp_export)->supported_features_handle_export->VALUE.sfds->avrct->a3;
-			//avrcp_export->supported_features_handle_export->VALUE.sfds->avrct.a4 = ((SDP::AVRCP::AVRCP_EXPORT_S*)dd->exported_data.avrcp_export)->supported_features_handle_export->VALUE.sfds->avrct->a4;
-			//avrcp_export->supported_features_handle_export->VALUE.sfds->avrct.a5 = ((SDP::AVRCP::AVRCP_EXPORT_S*)dd->exported_data.avrcp_export)->supported_features_handle_export->VALUE.sfds->avrct->a5;
-			//avrcp_export->supported_features_handle_export->VALUE.sfds->avrct.a6 = ((SDP::AVRCP::AVRCP_EXPORT_S*)dd->exported_data.avrcp_export)->supported_features_handle_export->VALUE.sfds->avrct->a6;
-			//avrcp_export->supported_features_handle_export->VALUE.sfds->avrct.a7 = ((SDP::AVRCP::AVRCP_EXPORT_S*)dd->exported_data.avrcp_export)->supported_features_handle_export->VALUE.sfds->avrct->a7;
-			//avrcp_export->supported_features_handle_export->VALUE.sfds->avrct.a8 = ((SDP::AVRCP::AVRCP_EXPORT_S*)dd->exported_data.avrcp_export)->supported_features_handle_export->VALUE.sfds->avrct->a8;
-
+			avrcp_export->supported_features_handle_export->VALUE.sfds->avrct.a0 = ((SDP::AVRCP::AVRCP_EXPORT_S*)dd->exported_data.avrcp_export)->supported_features_handle_export->VALUE.sfds->avrct->a0;
+			avrcp_export->supported_features_handle_export->VALUE.sfds->avrct.a1 = ((SDP::AVRCP::AVRCP_EXPORT_S*)dd->exported_data.avrcp_export)->supported_features_handle_export->VALUE.sfds->avrct->a1;
+			avrcp_export->supported_features_handle_export->VALUE.sfds->avrct.a2 = ((SDP::AVRCP::AVRCP_EXPORT_S*)dd->exported_data.avrcp_export)->supported_features_handle_export->VALUE.sfds->avrct->a2;
+			avrcp_export->supported_features_handle_export->VALUE.sfds->avrct.a3 = ((SDP::AVRCP::AVRCP_EXPORT_S*)dd->exported_data.avrcp_export)->supported_features_handle_export->VALUE.sfds->avrct->a3;
+			avrcp_export->supported_features_handle_export->VALUE.sfds->avrct.a4 = ((SDP::AVRCP::AVRCP_EXPORT_S*)dd->exported_data.avrcp_export)->supported_features_handle_export->VALUE.sfds->avrct->a4;
+			avrcp_export->supported_features_handle_export->VALUE.sfds->avrct.a5 = ((SDP::AVRCP::AVRCP_EXPORT_S*)dd->exported_data.avrcp_export)->supported_features_handle_export->VALUE.sfds->avrct->a5;
+			avrcp_export->supported_features_handle_export->VALUE.sfds->avrct.a6 = ((SDP::AVRCP::AVRCP_EXPORT_S*)dd->exported_data.avrcp_export)->supported_features_handle_export->VALUE.sfds->avrct->a6;
+			avrcp_export->supported_features_handle_export->VALUE.sfds->avrct.a7 = ((SDP::AVRCP::AVRCP_EXPORT_S*)dd->exported_data.avrcp_export)->supported_features_handle_export->VALUE.sfds->avrct->a7;
+			avrcp_export->supported_features_handle_export->VALUE.sfds->avrct.a8 = ((SDP::AVRCP::AVRCP_EXPORT_S*)dd->exported_data.avrcp_export)->supported_features_handle_export->VALUE.sfds->avrct->a8;
 		}
 	}
 
@@ -101,12 +90,9 @@ avrcp_export->supported_features_handle_export->VALUE.sfds->avrc_avrcc->a9 = ((S
 
 void CLI_DEFAULT_DATA::save_exported_data_MAP()
 {
-	map_export = gcnew CLI_MAP_EXPORT();
+	map_export = gcnew CLI_EXPORTS::CLI_MAP_EXPORT();
 
-	//((SDP::MAP::MAP_EXPORT_S*)dd->exported_data.map_export)->default_export->bluetooth_profile_descriptor_list_handle_export
-
-	save_exported_data_DEFAULT<CLI_MAP_EXPORT^, SDP::MAP::MAP_EXPORT_S*>(map_export, dd->exported_data.map_export);
-
+	save_exported_data_DEFAULT<CLI_EXPORTS::CLI_MAP_EXPORT^, SDP::MAP::MAP_EXPORT_S*>(map_export, dd->exported_data.map_export);
 
 	//GOEPL2CAPPSM
 	if (((SDP::MAP::MAP_EXPORT_S*)dd->exported_data.map_export)->goepl2cappsm_handle_export != NULL)
@@ -205,9 +191,9 @@ void CLI_DEFAULT_DATA::save_exported_data_MAP()
 
 void CLI_DEFAULT_DATA::save_exported_data_HFP()
 {
-	hfp_export = gcnew CLI_HFP_EXPORT();
+	hfp_export = gcnew CLI_EXPORTS::CLI_HFP_EXPORT();
 
-	save_exported_data_DEFAULT<CLI_HFP_EXPORT^, SDP::HFP::HFP_EXPORT_S*>(hfp_export, dd->exported_data.hfp_export);
+	save_exported_data_DEFAULT<CLI_EXPORTS::CLI_HFP_EXPORT^, SDP::HFP::HFP_EXPORT_S*>(hfp_export, dd->exported_data.hfp_export);
 
 	// NETWORK
 	if (((SDP::HFP::HFP_EXPORT_S*)dd->exported_data.hfp_export)->network_handle_export != NULL)
@@ -246,15 +232,14 @@ void CLI_DEFAULT_DATA::save_exported_data_HFP()
 		hfp_export->supported_features_handle_export->VALUE.sfds->repo.a7 = ((SDP::HFP::HFP_EXPORT_S*)dd->exported_data.hfp_export)->supported_features_handle_export->VALUE.sfds->repo->a7;
 	}
 
-
 	print_data_HFP();
 }
 
 void CLI_DEFAULT_DATA::save_exported_data_HSP()
 {
-	hsp_export = gcnew CLI_HSP_EXPORT();
+	hsp_export = gcnew CLI_EXPORTS::CLI_HSP_EXPORT();
 
-	save_exported_data_DEFAULT<CLI_HSP_EXPORT^, SDP::HSP::HSP_EXPORT_S*>(hsp_export, dd->exported_data.hsp_export);
+	save_exported_data_DEFAULT<CLI_EXPORTS::CLI_HSP_EXPORT^, SDP::HSP::HSP_EXPORT_S*>(hsp_export, dd->exported_data.hsp_export);
 
 	// REMOTE_AUDIO_VOLUME_CONTROL
 	if (((SDP::HSP::HSP_EXPORT_S*)dd->exported_data.hsp_export)->remote_audio_volume_control_handle_export != NULL)
@@ -273,9 +258,9 @@ void CLI_DEFAULT_DATA::save_exported_data_HSP()
 
 void CLI_DEFAULT_DATA::save_exported_data_NAP()
 {
-	nap_export = gcnew CLI_NAP_EXPORT();
+	nap_export = gcnew CLI_EXPORTS::CLI_NAP_EXPORT();
 
-	save_exported_data_DEFAULT<CLI_NAP_EXPORT^, SDP::NAP::NAP_EXPORT_S*>(nap_export, dd->exported_data.nap_export);
+	save_exported_data_DEFAULT<CLI_EXPORTS::CLI_NAP_EXPORT^, SDP::NAP::NAP_EXPORT_S*>(nap_export, dd->exported_data.nap_export);
 
 	// SECURITY_DESCRIPTION
 	if (((SDP::NAP::NAP_EXPORT_S*)dd->exported_data.nap_export)->security_description_handle_export != NULL)
@@ -324,9 +309,9 @@ void CLI_DEFAULT_DATA::save_exported_data_NAP()
 
 void CLI_DEFAULT_DATA::save_exported_data_OBEX()
 {
-	obex_export = gcnew CLI_OBEX_EXPORT();
+	obex_export = gcnew CLI_EXPORTS::CLI_OBEX_EXPORT();
 
-	save_exported_data_DEFAULT<CLI_OBEX_EXPORT^, SDP::OBEX::OBEX_EXPORT_S*>(obex_export, dd->exported_data.obex_export);
+	save_exported_data_DEFAULT<CLI_EXPORTS::CLI_OBEX_EXPORT^, SDP::OBEX::OBEX_EXPORT_S*>(obex_export, dd->exported_data.obex_export);
 
 	// SERVICE_VERSION
 	if (((SDP::OBEX::OBEX_EXPORT_S*)dd->exported_data.obex_export)->service_version_handle_export != NULL)
@@ -378,9 +363,9 @@ void CLI_DEFAULT_DATA::save_exported_data_OBEX()
 
 void CLI_DEFAULT_DATA::save_exported_data_PBAP()
 {
-	pbap_export = gcnew CLI_PBAP_EXPORT();
+	pbap_export = gcnew CLI_EXPORTS::CLI_PBAP_EXPORT();
 
-	save_exported_data_DEFAULT<CLI_PBAP_EXPORT^, SDP::PBAP::PBAP_EXPORT_S*>(pbap_export, dd->exported_data.pbap_export);
+	save_exported_data_DEFAULT<CLI_EXPORTS::CLI_PBAP_EXPORT^, SDP::PBAP::PBAP_EXPORT_S*>(pbap_export, dd->exported_data.pbap_export);
 
 	//SUPPORTED_REPOSITORIES
 	if (((SDP::PBAP::PBAP_EXPORT_S*)dd->exported_data.pbap_export)->supported_repositories_handle_export != NULL)
@@ -432,7 +417,7 @@ void CLI_DEFAULT_DATA::save_exported_data_PBAP()
 
 void CLI_DEFAULT_DATA::save_exported_data_PNPINFO()
 {
-	pnpinfo_export = gcnew CLI_INFO_EXPORT();
+	pnpinfo_export = gcnew CLI_EXPORTS::CLI_INFO_EXPORT();
 
 	if (((SDP::PNPINFO::INFO_EXPORT_S*)dd->exported_data.pnpinfo_export)->info_handle_export != NULL)
 	{

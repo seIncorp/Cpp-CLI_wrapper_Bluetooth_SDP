@@ -370,6 +370,8 @@ public ref struct CLI_SDP_settings
 	- UREDI: da se bo pnpinfo searchalo po vsakem podatku in ne po vseh naenkrat
 	- POPRAVI: ce dam search samo po service name, dobim error
 	- PREVERI: preveri vsak attr posebej pri searchenju
+	- DODAJ: preveri ali je kaksen attr. enabled za search drugace se ne sme izvesti SDP  in isto za service, ker drugace je error
+	- DODAJ: se za PANU service
 
 	- PREVERI: A_V_RemoteControlTarget in A_V_RemoteControlController <-- zakaj ne vrne, kje tezava v native ali tukaj <-- DONE !!
 	- UREDI: da se pri shranjevanju exported tudi preveri ali sploh obstajajo podatki	<-- DONE !!
@@ -416,15 +418,16 @@ public ref struct CLI_CACHED_DEVICE
 public ref struct CLI_SEARCHED_CACHED_DEVICES
 {
 	UInt32 numOfDevices;
-	cliext::vector<CLI_CACHED_DEVICE^> devices;
+	//cliext::vector<CLI_CACHED_DEVICE^> devices;
+	array<CLI_CACHED_DEVICE^>^ devices;
 
 	void print()
 	{
 		Console::WriteLine("*********** DEVICES *************");
 		Console::WriteLine("NUM: {0}", numOfDevices);
 
-		for (int i = 0; i < devices.size(); i++)
-			devices.at(i)->print();
+		for (int i = 0; i < numOfDevices; i++)
+			devices[i]->print();
 	}
 };
 
@@ -539,33 +542,68 @@ public:
 	!CLI_DEFAULT_DATA();
 
 
-	void CLI_connectToDevice(System::String^ str);
-	void CLI_closeConnectionToDevice();
+void CLI_connectToDevice(System::String^ str);
+void CLI_closeConnectionToDevice();
 
 	// reset to false all service and attr. 
-	void CLI_reset_SDP_service_for_search();
-	void CLI_reset_attr_search_for_service();
+void CLI_reset_SDP_service_for_search();
+void CLI_reset_attr_search_for_service();
 
 	// set all, specific service for search
-	void CLI_set_all_SDP_service_for_search();
-	void CLI_set_SDP_service_for_search(Int16 service);
+void CLI_set_all_SDP_service_for_search();
+void CLI_set_SDP_service_for_search(Int16 service);
+void CLI_disable_SDP_service_for_search(Int16 service);
 
 	// set all, default and specific attr. for search
-	void CLI_set_all_attr_of_SDP_service_for_search();
-	void CLI_set_default_attr_of_SDP_service_for_search(Int16 attr);
-	void CLI_set_service_specific_attr_of_SDP_service_for_search(Int16 service, Int16 attr);
+void CLI_set_all_attr_of_SDP_service_for_search();
+void CLI_set_default_attr_of_SDP_service_for_search(Int16 attr);
+void CLI_set_service_specific_attr_of_SDP_service_for_search(Int16 service, Int16 attr);
 
 
 	// functions for different data
-	void CLI_SDPsearch(System::String^ str);
-	void CLI_getBthDeviceInfo();
-	void CLI_getLocalBthInfo();
+void CLI_SDPsearch(System::String^ str);
+void CLI_getBthDeviceInfo();
+void CLI_getLocalBthInfo();
 
 
 
+void CLI_set_all_default_attr_print();
+void CLI_disable_all_default_attr_print();
+void CLI_set_default_attr_print(Int16 def_attr, int onOff);
+void CLI_set_all_specific_attrs_service_print(Int16 service, int onOff);
+void CLI_set_specific_attr_service_print(Int16 service, Int16 attr, int onOff);
 
-	// TOOD: daj v private
-	// exporting default attr functions sam as in default class
+
+
+	// to show settings of service and attributes
+	void CLI_show_print_service();
+	void CLI_show_SDP_service_search();
+
+
+	CLI_SDP_settings^ sdp_settings;
+
+	CLI_SEARCHED_CACHED_DEVICES^ cached_devices;
+	CLI_LOCAL_RADIO_DEVICE_DATA^ local_device_radio;
+
+	CLI_EXPORTS::CLI_A2DP_EXPORT^ a2dp_export;
+	CLI_EXPORTS::CLI_AVRCP_EXPORT^ avrcp_export;
+	CLI_EXPORTS::CLI_MAP_EXPORT^ map_export;
+	CLI_EXPORTS::CLI_HFP_EXPORT^ hfp_export;
+	CLI_EXPORTS::CLI_HSP_EXPORT^ hsp_export;
+	CLI_EXPORTS::CLI_NAP_EXPORT^ nap_export;
+	CLI_EXPORTS::CLI_OBEX_EXPORT^ obex_export;
+	CLI_EXPORTS::CLI_PBAP_EXPORT^ pbap_export;
+	CLI_EXPORTS::CLI_INFO_EXPORT^ pnpinfo_export;
+
+
+private:
+	IOCTL_S::DEFAULT_DATA* dd;
+	void setNativeDLLSettingsToFalse();
+	void CLI_show_print_service_NATIVE();
+	void CLI_set_default_print_service_NATIVE(Int16 def_attr);
+	void CLI_set_specific_print_service_NATIVE(Int16 service);
+
+
 	template<class A, class B>
 	void save_exported_data_DEFAULT(A main, BYTE* submain)
 	{
@@ -605,11 +643,15 @@ public:
 
 			main->default_export->class_id_handle_export->VALUE.num_classes = ((B)submain)->default_export->class_id_handle_export->VALUE.num_classes;
 
-			main->default_export->class_id_handle_export->VALUE.classes = gcnew CLI_SERVICE_CLASS();
+			main->default_export->class_id_handle_export->VALUE.classes = gcnew array<CLI_SERVICE_CLASS^>(main->default_export->class_id_handle_export->VALUE.num_classes);
 			// TODO: preveri za element v classes ce se sploh uporablja
-			main->default_export->class_id_handle_export->VALUE.classes->element = gcnew CLI_ATTRIBUTE_ID_ELEMENT();
-			main->default_export->class_id_handle_export->VALUE.classes->additional_bits_flag = ((B)submain)->default_export->class_id_handle_export->VALUE.classes->additional_bits_flag;
-			main->default_export->class_id_handle_export->VALUE.classes->value = ((B)submain)->default_export->class_id_handle_export->VALUE.classes->value;
+			for (int a = 0; a < main->default_export->class_id_handle_export->VALUE.num_classes; a++)
+			{
+				main->default_export->class_id_handle_export->VALUE.classes[a] = gcnew CLI_SERVICE_CLASS();
+				main->default_export->class_id_handle_export->VALUE.classes[a]->element = gcnew CLI_ATTRIBUTE_ID_ELEMENT();
+				main->default_export->class_id_handle_export->VALUE.classes[a]->additional_bits_flag = ((B)submain)->default_export->class_id_handle_export->VALUE.classes[a].additional_bits_flag;
+				main->default_export->class_id_handle_export->VALUE.classes[a]->value = ((B)submain)->default_export->class_id_handle_export->VALUE.classes[a].value;
+			}
 		}
 
 		//  PROTOCOL_DESCRIPTOR_LIST
@@ -750,9 +792,54 @@ public:
 	void save_exported_data_PBAP();
 	void save_exported_data_PNPINFO();
 
+	// printing functions
+	template<class A, class C>
+	void print_data_DEFAULT(A main, BYTE* submain)
+	{
+		if (((C)submain)->default_export->record_handle_export != NULL)
+			if (sdp_settings->print == 1 || sdp_settings->print_service.print_service_record == 1)
+				main->default_export->record_handle_export->print<SDP::SERVICE_RECORD_S::VV>(((C)submain)->default_export->record_handle_export->VALUE, *dd);
 
+		if (((C)submain)->default_export->class_id_handle_export != NULL)
+			if (sdp_settings->print == 1 || sdp_settings->print_service.print_service_class_id_list == 1)
+				main->default_export->class_id_handle_export->print<SDP::SERVICE_CLASS_ID_LIST_S::VV>(((C)submain)->default_export->class_id_handle_export->VALUE, *dd);
 
-	// TOOD: daj v private
+		if (((C)submain)->default_export->protocol_descriptor_list_handle_export != NULL)
+			if (sdp_settings->print == 1 || sdp_settings->print_service.print_protocol_descriptor_list == 1)
+				main->default_export->protocol_descriptor_list_handle_export->print<SDP::PROTOCOL_DESCRIPTOR_LIST_S::VV>(((C)submain)->default_export->protocol_descriptor_list_handle_export->VALUE, *dd);
+
+		if (((C)submain)->default_export->service_name_handle_export != NULL)
+			if (sdp_settings->print == 1 || sdp_settings->print_service.print_service_name == 1)
+				main->default_export->service_name_handle_export->print<SDP::SERVICE_NAME_S::VV>(((C)submain)->default_export->service_name_handle_export->VALUE, *dd);
+
+		if (((C)submain)->default_export->bluetooth_profile_descriptor_list_handle_export != NULL)
+			if (sdp_settings->print == 1 || sdp_settings->print_service.print_bluetooth_profile_descriptor_list == 1)
+				main->default_export->bluetooth_profile_descriptor_list_handle_export->print<SDP::BLUETOOTH_PROFILE_DESCRIPTOR_LIST_S::VV>(((C)submain)->default_export->bluetooth_profile_descriptor_list_handle_export->VALUE, *dd);
+
+		if (((C)submain)->default_export->provider_name_export != NULL)
+			if (sdp_settings->print == 1 || sdp_settings->print_service.print_provider_name == 1)
+				main->default_export->provider_name_export->print<SDP::PROVIDER_NAME_S::VV>(((C)submain)->default_export->provider_name_export->VALUE, *dd);
+
+		if (((C)submain)->default_export->language_base_attribute_id_list_export != NULL)
+			if (sdp_settings->print == 1 || sdp_settings->print_service.print_language_base_attribute_id_list == 1)
+				main->default_export->language_base_attribute_id_list_export->print<SDP::LANGUAGE_BASE_ATTRIBUTE_ID_LIST_S::VV>(((C)submain)->default_export->language_base_attribute_id_list_export->VALUE, *dd);
+
+		if (((C)submain)->default_export->service_description_export != NULL)
+			if (sdp_settings->print == 1 || sdp_settings->print_service.print_service_description == 1)
+				main->default_export->service_description_export->print<SDP::SERVICE_DESCRIPTION_S::VV>(((C)submain)->default_export->service_description_export->VALUE, *dd);
+
+	}
+
+	void print_data_A2DP();
+	void print_data_AVRCP();
+	void print_data_MAP();
+	void print_data_HFP();
+	void print_data_HSP();
+	void print_data_NAP();
+	void print_data_OBEX();
+	void print_data_PBAP();
+	void print_data_PNPINFO();
+
 	// deleting structures
 	// delete function for default data of attribute
 	template<class A>
@@ -786,8 +873,14 @@ public:
 
 		if (main->default_export->class_id_handle_export != nullptr)
 		{
-			if (main->default_export->class_id_handle_export->VALUE.classes->element != nullptr)
-				delete main->default_export->class_id_handle_export->VALUE.classes->element;
+			for (int a = 0; a < main->default_export->class_id_handle_export->VALUE.num_classes; a++)
+			{
+				if (main->default_export->class_id_handle_export->VALUE.classes[a]->element != nullptr)
+					delete main->default_export->class_id_handle_export->VALUE.classes[a]->element;
+
+				if (main->default_export->class_id_handle_export->VALUE.classes[a] != nullptr)
+					delete main->default_export->class_id_handle_export->VALUE.classes[a];
+			}
 
 			if (main->default_export->class_id_handle_export->VALUE.classes != nullptr)
 				delete main->default_export->class_id_handle_export->VALUE.classes;
@@ -877,98 +970,41 @@ public:
 	void delete_exported_data_PBAP();
 	void delete_exported_data_PNPINFO();
 
-
-
-
-
-
-	// TOOD: daj v private
-	// printing functions
-	template<class A, class C>
-	void print_data_DEFAULT(A main, BYTE* submain)
+	
+	// ni samo za default attributes
+	template<class A, class B>
+	void save_default_data_of_attr(A main, IOCTL_S::DEFAULT_DATA* dd, B locale)
 	{
-		if (((C)submain)->default_export->record_handle_export != NULL)
-			if (sdp_settings->print == 1 || sdp_settings->print_service.print_service_record == 1)
-				main->default_export->record_handle_export->print<SDP::SERVICE_RECORD_S::VV>(((C)submain)->default_export->record_handle_export->VALUE, *dd);
+		main->attr_id = gcnew CLI_ATTR_ID();
 
-		if (((C)submain)->default_export->class_id_handle_export != NULL)
-			if (sdp_settings->print == 1 || sdp_settings->print_service.print_service_class_id_list == 1)
-				main->default_export->class_id_handle_export->print<SDP::SERVICE_CLASS_ID_LIST_S::VV>(((C)submain)->default_export->class_id_handle_export->VALUE, *dd);
+		main->attr_id->size_bytes = locale->attr_id->size_bytes;
+		main->attr_id->additional_bits_flag = locale->attr_id->additional_bits_flag;
+		main->attr_id->additional_bits_for_size = locale->attr_id->additional_bits_for_size;
 
-		if (((C)submain)->default_export->protocol_descriptor_list_handle_export != NULL)
-			if (sdp_settings->print == 1 || sdp_settings->print_service.print_protocol_descriptor_list == 1)
-				main->default_export->protocol_descriptor_list_handle_export->print<SDP::PROTOCOL_DESCRIPTOR_LIST_S::VV>(((C)submain)->default_export->protocol_descriptor_list_handle_export->VALUE, *dd);
+		main->attr_id->element = gcnew CLI_ATTRIBUTE_ID_ELEMENT();
+		main->attr_id->element->element.size = locale->attr_id->element->element.size;
+		main->attr_id->element->element.type = locale->attr_id->element->element.type;
 
-		if (((C)submain)->default_export->service_name_handle_export != NULL)
-			if (sdp_settings->print == 1 || sdp_settings->print_service.print_service_name == 1)
-				main->default_export->service_name_handle_export->print<SDP::SERVICE_NAME_S::VV>(((C)submain)->default_export->service_name_handle_export->VALUE, *dd);
+		main->attr_id->value = gcnew array< BYTE^ >(locale->attr_id->size_bytes);
 
-		if (((C)submain)->default_export->bluetooth_profile_descriptor_list_handle_export != NULL)
-			if (sdp_settings->print == 1 || sdp_settings->print_service.print_bluetooth_profile_descriptor_list == 1)
-				main->default_export->bluetooth_profile_descriptor_list_handle_export->print<SDP::BLUETOOTH_PROFILE_DESCRIPTOR_LIST_S::VV>(((C)submain)->default_export->bluetooth_profile_descriptor_list_handle_export->VALUE, *dd);
+		for (int i = 0; i < locale->attr_id->size_bytes; i++)
+			main->attr_id->value[i] = locale->attr_id->value[i];
 
-		if (((C)submain)->default_export->provider_name_export != NULL)
-			if (sdp_settings->print == 1 || sdp_settings->print_service.print_provider_name == 1)
-				main->default_export->provider_name_export->print<SDP::PROVIDER_NAME_S::VV>(((C)submain)->default_export->provider_name_export->VALUE, *dd);
+		main->VALUE.element = gcnew CLI_ATTRIBUTE_ID_ELEMENT();
+		main->VALUE.element->element.size = locale->VALUE.element->element.size;
+		main->VALUE.element->element.type = locale->VALUE.element->element.type;
 
-		if (((C)submain)->default_export->language_base_attribute_id_list_export != NULL)
-			if (sdp_settings->print == 1 || sdp_settings->print_service.print_language_base_attribute_id_list == 1)
-				main->default_export->language_base_attribute_id_list_export->print<SDP::LANGUAGE_BASE_ATTRIBUTE_ID_LIST_S::VV>(((C)submain)->default_export->language_base_attribute_id_list_export->VALUE, *dd);
+		main->VALUE.size_bytes = locale->VALUE.size_bytes;
+		main->VALUE.additional_bits_flag = locale->VALUE.additional_bits_flag;
+		main->VALUE.additional_bits_for_size = locale->VALUE.additional_bits_for_size;
+		main->VALUE.size_bytes_additional = locale->VALUE.size_bytes_additional;
 
-		if (((C)submain)->default_export->service_description_export != NULL)
-			if (sdp_settings->print == 1 || sdp_settings->print_service.print_service_description == 1)
-				main->default_export->service_description_export->print<SDP::SERVICE_DESCRIPTION_S::VV>(((C)submain)->default_export->service_description_export->VALUE, *dd);
+		main->VALUE.value = gcnew array< BYTE^ >(locale->VALUE.size_bytes);
 
+		for (int i = 0; i < locale->VALUE.size_bytes; i++)
+			main->VALUE.value[i] = locale->VALUE.value[i];
 	}
 
-	void print_data_A2DP();
-	void print_data_AVRCP();
-	void print_data_MAP();
-	void print_data_HFP();
-	void print_data_HSP();
-	void print_data_NAP();
-	void print_data_OBEX();
-	void print_data_PBAP();
-	void print_data_PNPINFO();
 
-
-	void CLI_set_all_default_attr_print();
-	void CLI_disable_all_default_attr_print();
-	void CLI_set_default_attr_print(Int16 def_attr, int onOff);
-	void CLI_set_all_specific_attrs_service_print(Int16 service, int onOff);
-	void CLI_set_specific_attr_service_print(Int16 service, Int16 attr, int onOff);
-
-
-
-
-	// to show settings of service and attributes
-	void CLI_show_print_service();
-	void CLI_show_SDP_service_search();
-
-
-	CLI_SDP_settings^ sdp_settings;
-
-
-	CLI_SEARCHED_CACHED_DEVICES^ cached_devices;
-	CLI_LOCAL_RADIO_DEVICE_DATA^ local_device_radio;
-
-
-	CLI_A2DP_EXPORT^ a2dp_export;
-	CLI_AVRCP_EXPORT^ avrcp_export;
-	CLI_MAP_EXPORT^ map_export;
-	CLI_HFP_EXPORT^ hfp_export;
-	CLI_HSP_EXPORT^ hsp_export;
-	CLI_NAP_EXPORT^ nap_export;
-	CLI_OBEX_EXPORT^ obex_export;
-	CLI_PBAP_EXPORT^ pbap_export;
-	CLI_INFO_EXPORT^ pnpinfo_export;
-
-
-private:
-	IOCTL_S::DEFAULT_DATA* dd;
-	void setNativeDLLSettingsToFalse();
-	void CLI_show_print_service_NATIVE();
-	void CLI_set_default_print_service_NATIVE(Int16 def_attr);
-	void CLI_set_specific_print_service_NATIVE(Int16 service);
 };
 

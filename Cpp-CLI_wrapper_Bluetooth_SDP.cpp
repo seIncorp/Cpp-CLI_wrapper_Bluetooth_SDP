@@ -249,17 +249,20 @@ void CLI_DEFAULT_DATA::CLI_getBthDeviceInfo()
 
 		cached_devices->numOfDevices = (UInt32)dd->exported_data.devices->numOfDevices;
 
-		for (int Stories = 0; Stories < dd->exported_data.devices->devices.size(); Stories++)
-		{
-			System::String^ str = System::Runtime::InteropServices::Marshal::PtrToStringAnsi(static_cast<System::IntPtr>(dd->exported_data.devices->devices.at(Stories).getName()));
+		cached_devices->devices = gcnew array<CLI_CACHED_DEVICE^>(cached_devices->numOfDevices);
 
-			cached_devices->devices.push_back(gcnew CLI_CACHED_DEVICE());
-			cached_devices->devices.at(Stories)->flags = dd->exported_data.devices->devices.at(Stories).getFlags();
-			cached_devices->devices.at(Stories)->name = str;
-			cached_devices->devices.at(Stories)->address = gcnew array< BYTE^ >(6);
+		for (int i = 0; i < dd->exported_data.devices->devices.size(); i++)
+		{
+			cached_devices->devices[i] = gcnew CLI_CACHED_DEVICE();
+			System::String^ str = System::Runtime::InteropServices::Marshal::PtrToStringAnsi(static_cast<System::IntPtr>(dd->exported_data.devices->devices.at(i).getName()));
+
+			//cached_devices->devices.push_back(gcnew CLI_CACHED_DEVICE());
+			cached_devices->devices[i]->flags = dd->exported_data.devices->devices.at(i).getFlags();
+			cached_devices->devices[i]->name = str;
+			cached_devices->devices[i]->address = gcnew array< BYTE^ >(6);
 
 			for (int i = 0; i < 6; i++)
-				cached_devices->devices.at(Stories)->address[i] = dd->exported_data.devices->devices.at(Stories).getAddress()[i];
+				cached_devices->devices[i]->address[i] = dd->exported_data.devices->devices.at(i).getAddress()[i];
 		}
 
 		if (sdp_settings->print == 1)
@@ -345,6 +348,7 @@ void CLI_DEFAULT_DATA::CLI_set_all_SDP_service_for_search()
 
 void CLI_DEFAULT_DATA::CLI_set_SDP_service_for_search(Int16 service)
 {
+	// TODO: daj izpis pod print ali debug
 	switch (service)
 	{
 	case SDP::SERVICE_CLASS_ID::PnPInformation:
@@ -412,6 +416,90 @@ void CLI_DEFAULT_DATA::CLI_set_SDP_service_for_search(Int16 service)
 		Console::WriteLine("[Service search ON] Message_Access_Server");
 		break;
 
+	case SDP::SERVICE_CLASS_ID::GenericAudio:
+		dd->services_for_search.GenericAudio = 1;
+		Console::WriteLine("[Service search ON] GenericAudio");
+		break;
+	}
+
+	Console::WriteLine("");
+}
+
+void CLI_DEFAULT_DATA::CLI_disable_SDP_service_for_search(Int16 service)
+{
+	// TODO: daj izpis pod print ali debug
+	
+	switch (service)
+	{
+	case SDP::SERVICE_CLASS_ID::PnPInformation:
+		dd->services_for_search.PnPInformation = 0;
+		Console::WriteLine("[Service search OFF] PnPInformation");
+		break;
+
+	case SDP::SERVICE_CLASS_ID::Phonebook_Access_PSE:
+		dd->services_for_search.Phonebook_Access_PSE = 0;
+		Console::WriteLine("[Service search OFF] Phonebook_Access_PSE");
+		break;
+
+	case SDP::SERVICE_CLASS_ID::OBEXObjectPush:
+		dd->services_for_search.OBEXObjectPush = 0;
+		Console::WriteLine("[Service search OFF] OBEXObjectPush");
+		break;
+
+	case SDP::SERVICE_CLASS_ID::_NAP:
+		dd->services_for_search._NAP = 0;
+		Console::WriteLine("[Service search OFF] _NAP");
+		break;
+
+	case (SDP::SERVICE_CLASS_ID::Headset):
+		dd->services_for_search.Headset = 0;
+		Console::WriteLine("[Service search OFF] Headset");
+		break;
+
+	case (SDP::SERVICE_CLASS_ID::Headset_Audio_Gateway):
+		dd->services_for_search.Headset_Audio_Gateway = 0;
+		Console::WriteLine("[Service search ONOFF Headset_Audio_Gateway");
+		break;
+
+	case SDP::SERVICE_CLASS_ID::Handsfree:
+		dd->services_for_search.Handsfree = 0;
+		Console::WriteLine("[Service search OFF] Handsfree");
+		break;
+
+	case SDP::SERVICE_CLASS_ID::HandsfreeAudioGateway:
+		dd->services_for_search.HandsfreeAudioGateway = 0;
+		Console::WriteLine("[Service search OFF] HandsfreeAudioGateway");
+		break;
+
+	case (SDP::SERVICE_CLASS_ID::A_V_RemoteControl):
+		dd->services_for_search.A_V_RemoteControl = 0;
+		Console::WriteLine("[Service search OFF] A_V_RemoteControl");
+		break;
+
+	case (SDP::SERVICE_CLASS_ID::A_V_RemoteControlTarget):
+		dd->services_for_search.A_V_RemoteControlTarget = 0;
+		Console::WriteLine("[Service search OFF] A_V_RemoteControlTarget");
+		break;
+
+	case (SDP::SERVICE_CLASS_ID::A_V_RemoteControlController):
+		dd->services_for_search.A_V_RemoteControlController = 0;
+		Console::WriteLine("[Service search OFF] A_V_RemoteControlController");
+		break;
+
+	case SDP::SERVICE_CLASS_ID::AudioSource:
+		dd->services_for_search.AudioSource = 0;
+		Console::WriteLine("[Service search OFF] AudioSource");
+		break;
+
+	case SDP::SERVICE_CLASS_ID::Message_Access_Server:
+		dd->services_for_search.Message_Access_Server = 0;
+		Console::WriteLine("[Service search OFF] Message_Access_Server");
+		break;
+
+	case SDP::SERVICE_CLASS_ID::GenericAudio:
+		dd->services_for_search.GenericAudio = 0;
+		Console::WriteLine("[Service search OFF] GenericAudio");
+		break;
 	}
 
 	Console::WriteLine("");
@@ -735,6 +823,7 @@ void CLI_DEFAULT_DATA::CLI_set_service_specific_attr_of_SDP_service_for_search(I
 
 void CLI_DEFAULT_DATA::CLI_show_SDP_service_search()
 {
+	// TODO: dodaj se za druge service npr. GenericAudio
 	if (dd->services_for_search.PnPInformation == 1)
 		Console::WriteLine("[Service search ON] PnPInformation");
 	else

@@ -581,7 +581,7 @@ void CLI_DEFAULT_DATA::CLI_set_specific_attr_service_print(Int16 service, Int16 
 
 void CLI_DEFAULT_DATA::CLI_show_print_service()
 {
-	
+	// TODO: dodaj se za printanje glede sdp_settingov
 }
 
 /*******************************************************************************************/

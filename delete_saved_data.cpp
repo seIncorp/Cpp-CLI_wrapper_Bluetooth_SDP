@@ -7,7 +7,7 @@
 
 void CLI_DEFAULT_DATA::delete_exported_data_A2DP()
 {
-	delete_exported_data_DEFAULT<CLI_A2DP_EXPORT^>(a2dp_export);
+	delete_exported_data_DEFAULT<CLI_EXPORTS::CLI_A2DP_EXPORT^>(a2dp_export);
 
 	if (a2dp_export->supported_features_handle_export->VALUE.sfds != nullptr)
 		delete a2dp_export->supported_features_handle_export->VALUE.sfds;
@@ -22,7 +22,7 @@ void CLI_DEFAULT_DATA::delete_exported_data_A2DP()
 
 void CLI_DEFAULT_DATA::delete_exported_data_AVRCP()
 {
-	delete_exported_data_DEFAULT<CLI_AVRCP_EXPORT^>(avrcp_export);
+	delete_exported_data_DEFAULT<CLI_EXPORTS::CLI_AVRCP_EXPORT^>(avrcp_export);
 
 	if (avrcp_export->supported_features_handle_export->VALUE.sfds != nullptr)
 		delete avrcp_export->supported_features_handle_export->VALUE.sfds;
@@ -37,7 +37,7 @@ void CLI_DEFAULT_DATA::delete_exported_data_AVRCP()
 
 void CLI_DEFAULT_DATA::delete_exported_data_MAP()
 {
-	delete_exported_data_DEFAULT<CLI_MAP_EXPORT^>(map_export);
+	delete_exported_data_DEFAULT<CLI_EXPORTS::CLI_MAP_EXPORT^>(map_export);
 
 	delete_default_data_of_attr<MAP::CLI_GOEPL2CAPPSM^>(map_export->goepl2cappsm_handle_export);
 	if (map_export->goepl2cappsm_handle_export != nullptr)
@@ -67,7 +67,7 @@ void CLI_DEFAULT_DATA::delete_exported_data_MAP()
 
 void CLI_DEFAULT_DATA::delete_exported_data_HFP()
 {
-	delete_exported_data_DEFAULT<CLI_HFP_EXPORT^>(hfp_export);
+	delete_exported_data_DEFAULT<CLI_EXPORTS::CLI_HFP_EXPORT^>(hfp_export);
 
 	delete_default_data_of_attr<HFP::CLI_NETWORK^>(hfp_export->network_handle_export);
 	if (hfp_export->network_handle_export != nullptr)
@@ -86,7 +86,7 @@ void CLI_DEFAULT_DATA::delete_exported_data_HFP()
 
 void CLI_DEFAULT_DATA::delete_exported_data_HSP()
 {
-	delete_exported_data_DEFAULT<CLI_HSP_EXPORT^>(hsp_export);
+	delete_exported_data_DEFAULT<CLI_EXPORTS::CLI_HSP_EXPORT^>(hsp_export);
 
 	delete_default_data_of_attr<HSP::CLI_REMOTE_AUDIO_VOLUME_CONTROL^>(hsp_export->remote_audio_volume_control_handle_export);
 	if (hsp_export->remote_audio_volume_control_handle_export != nullptr)
@@ -98,7 +98,7 @@ void CLI_DEFAULT_DATA::delete_exported_data_HSP()
 
 void CLI_DEFAULT_DATA::delete_exported_data_NAP()
 {
-	delete_exported_data_DEFAULT<CLI_NAP_EXPORT^>(nap_export);
+	delete_exported_data_DEFAULT<CLI_EXPORTS::CLI_NAP_EXPORT^>(nap_export);
 
 	delete_default_data_of_attr<NAP::CLI_SECURITY_DESCRIPTION^>(nap_export->security_description_handle_export);
 	if (nap_export->security_description_handle_export != nullptr)
@@ -118,7 +118,7 @@ void CLI_DEFAULT_DATA::delete_exported_data_NAP()
 
 void CLI_DEFAULT_DATA::delete_exported_data_OBEX()
 {
-	delete_exported_data_DEFAULT<CLI_OBEX_EXPORT^>(obex_export);
+	delete_exported_data_DEFAULT<CLI_EXPORTS::CLI_OBEX_EXPORT^>(obex_export);
 
 	delete_default_data_of_attr<MAP::CLI_GOEPL2CAPPSM^>(obex_export->goepl2cappsm_handle_export);
 	if (obex_export->goepl2cappsm_handle_export != nullptr)
@@ -141,7 +141,7 @@ void CLI_DEFAULT_DATA::delete_exported_data_OBEX()
 
 void CLI_DEFAULT_DATA::delete_exported_data_PBAP()
 {
-	delete_exported_data_DEFAULT<CLI_PBAP_EXPORT^>(pbap_export);
+	delete_exported_data_DEFAULT<CLI_EXPORTS::CLI_PBAP_EXPORT^>(pbap_export);
 
 	delete_default_data_of_attr<MAP::CLI_GOEPL2CAPPSM^>(pbap_export->goepl2cappsm_handle_export);
 	if (pbap_export->goepl2cappsm_handle_export != nullptr)
