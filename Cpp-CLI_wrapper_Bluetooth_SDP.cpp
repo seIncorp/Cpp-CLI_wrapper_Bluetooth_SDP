@@ -261,8 +261,8 @@ void CLI_DEFAULT_DATA::CLI_getBthDeviceInfo()
 			cached_devices->devices[i]->name = str;
 			cached_devices->devices[i]->address = gcnew array< BYTE^ >(6);
 
-			for (int i = 0; i < 6; i++)
-				cached_devices->devices[i]->address[i] = dd->exported_data.devices->devices.at(i).getAddress()[i];
+			for (int a = 0; a < 6; a++)
+				cached_devices->devices[i]->address[a] = dd->exported_data.devices->devices.at(i).getAddress()[a];
 		}
 
 		if (sdp_settings->print == 1)

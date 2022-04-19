@@ -127,13 +127,31 @@ DLL wrapper have next functions:
 # How to use it on client app
 You have more options:
 1. in project add as new reference for "Cpp-CLI_wrapper_Bluetooth_SDP.dll"
-2. copy&paste "Cpp-CLI_wrapper_Bluetooth_SDP.dll" to your app project
+2. copy&paste "Cpp-CLI_wrapper_Bluetooth_SDP.dll" and "SDP_data.dll" to your app project
 
 # Examples 
 ### Connection and disconnection from local radio
 ```
+// 1. you must create class instance
 CLI_DEFAULT_DATA data = new CLI_DEFAULT_DATA();
+// 2. call CLI_connectToDevice to connect to local bluetooth radio
 data.CLI_connectToDevice("\\\\?\\GLOBALROOT\\Device\\USBPDO-4");
+// 3. close the connection
 data.CLI_closeConnectionToDevice();
 ```
 
+### Getting list of previously searched devices and export/print data
+```
+// 1. you must create class instance
+CLI_DEFAULT_DATA data = new CLI_DEFAULT_DATA();
+// 2. call CLI_connectToDevice to connect to local bluetooth radio
+data.CLI_connectToDevice("\\\\?\\GLOBALROOT\\Device\\USBPDO-4");
+// 3.1 if you want to print it in console you must set
+data.sdp_settings.print = 1;
+// 3.2 calling driver to return list of devices
+data.CLI_getBthDeviceInfo();
+// 3.3 exporting data
+Console.WriteLine("{0}",data.cached_devices.devices[0].name);
+// 4. close the connection
+data.CLI_closeConnectionToDevice();
+```
