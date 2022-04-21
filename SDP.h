@@ -174,7 +174,9 @@ namespace CLI_DEFAULT
 		ref struct VV : CLI_VALUE
 		{
 			unsigned int handle;
-		} VALUE;
+		};
+
+		VV^ VALUE;
 
 		template<class T>
 		void print(T v, IOCTL_S::DEFAULT_DATA dd)
@@ -184,8 +186,10 @@ namespace CLI_DEFAULT
 			printATTR_ELEMENT(&dd);
 			printVALUE_ELEMENT(v, dd);
 
-			Console::WriteLine("Record handle: 0x{0:X8}\n", VALUE.handle);
+			Console::WriteLine("Record handle: 0x{0:X8}\n", VALUE->handle);
 		}
+
+
 	};
 
 	public ref struct CLI_SERVICE_CLASS_ID_LIST : CLI_DEFAULT_OBJECT
@@ -195,7 +199,9 @@ namespace CLI_DEFAULT
 
 			int num_classes;
 			array<CLI_SERVICE_CLASS^>^ classes;				// pointer to array of SERVICE_CLASS objects
-		} VALUE;
+		};
+
+		VV^ VALUE;
 
 		template<class T>
 		void print(T v, IOCTL_S::DEFAULT_DATA dd)
@@ -208,8 +214,8 @@ namespace CLI_DEFAULT
 			printATTR_ELEMENT(&dd);
 			printVALUE_ELEMENT(v, dd);
 
-			for (int a = 0; a < VALUE.num_classes; a++)
-				Console::Write("Class ID [{0}]: 0x{1:X4}\n", a, VALUE.classes[a]->value);
+			for (int a = 0; a < VALUE->num_classes; a++)
+				Console::Write("Class ID [{0}]: 0x{1:X4}\n", a, VALUE->classes[a]->value);
 
 			Console::WriteLine("\n");
 		}
@@ -226,7 +232,9 @@ namespace CLI_DEFAULT
 
 			int _BNEP_flag;
 
-		} VALUE;
+		};
+
+		VV^ VALUE;
 
 		System::String^ getProtocolTypeString(SHORT type)
 		{
@@ -354,20 +362,20 @@ namespace CLI_DEFAULT
 			printVALUE_ELEMENT(v, dd);
 
 
-			for (int c = 0; c < VALUE.num_protocols; c++)
+			for (int c = 0; c < VALUE->num_protocols; c++)
 			{
-				if (VALUE._BNEP_flag == 1 && c < (VALUE.num_protocols - 1))
+				if (VALUE->_BNEP_flag == 1 && c < (VALUE->num_protocols - 1))
 				{
 					/* za vse protokole ki so BNEP  */
 					Console::WriteLine("Protocol [{0}]:", c);
 
 					Console::Write("\tValue: ");
-					for (int d = 0; d < VALUE.protocols[c]->additional_bits_for_size; d++)
-						Console::WriteLine("0x{0} ", VALUE.protocols[c]->value[d]);
+					for (int d = 0; d < VALUE->protocols[c]->additional_bits_for_size; d++)
+						Console::WriteLine("0x{0} ", VALUE->protocols[c]->value[d]);
 					Console::WriteLine("");
 					
-					Console::WriteLine("\tID [0x{0:X4}][{1}]", VALUE.protocols[c]->protocol_id, getProtocolTypeString(VALUE.protocols[c]->protocol_id));
-					if (VALUE.protocols[c]->additional_parameters_flag)
+					Console::WriteLine("\tID [0x{0:X4}][{1}]", VALUE->protocols[c]->protocol_id, getProtocolTypeString(VALUE->protocols[c]->protocol_id));
+					if (VALUE->protocols[c]->additional_parameters_flag)
 					{
 						if (dd.service_class_id_in_use == SDP::Handsfree ||
 							dd.service_class_id_in_use == SDP::Headset ||
@@ -381,7 +389,7 @@ namespace CLI_DEFAULT
 							dd.service_class_id_in_use == SDP::Message_Access_Profile ||
 							dd.service_class_id_in_use == SDP::GenericAudio
 							)
-							Console::WriteLine("\tChannel number: {0}", VALUE.protocols[c]->pdsp->server_channel_num);
+							Console::WriteLine("\tChannel number: {0}", VALUE->protocols[c]->pdsp->server_channel_num);
 
 						if (dd.service_class_id_in_use == SDP::AudioSource ||
 							dd.service_class_id_in_use == SDP::AudioSink ||
@@ -392,40 +400,40 @@ namespace CLI_DEFAULT
 							dd.service_class_id_in_use == SDP::_NAP
 							)
 						{
-							if (VALUE.protocols[c]->protocol_id == SDP::_L2CAP)
-								Console::WriteLine("\tPSM: 0x{0:X4}", VALUE.protocols[c]->pdsp->PSM);
+							if (VALUE->protocols[c]->protocol_id == SDP::_L2CAP)
+								Console::WriteLine("\tPSM: 0x{0:X4}", VALUE->protocols[c]->pdsp->PSM);
 
-							if (VALUE.protocols[c]->protocol_id == SDP::_AVDTP ||
-								VALUE.protocols[c]->protocol_id == SDP::_AVCTP ||
-								VALUE.protocols[c]->protocol_id == SDP::_BNEP
+							if (VALUE->protocols[c]->protocol_id == SDP::_AVDTP ||
+								VALUE->protocols[c]->protocol_id == SDP::_AVCTP ||
+								VALUE->protocols[c]->protocol_id == SDP::_BNEP
 								)
-								Console::WriteLine("\tVersion: 0x{0:X4}", VALUE.protocols[c]->pdsp->Version);
+								Console::WriteLine("\tVersion: 0x{0:X4}", VALUE->protocols[c]->pdsp->Version);
 
-							if (VALUE.protocols[c]->protocol_id == SDP::_BNEP)
+							if (VALUE->protocols[c]->protocol_id == SDP::_BNEP)
 							{
-								Console::WriteLine("\tNumber of supported network packet type: {0}", VALUE.protocols[c]->pdsp->num_of_Supported_Network_Packet_Type_List_PANU);
+								Console::WriteLine("\tNumber of supported network packet type: {0}", VALUE->protocols[c]->pdsp->num_of_Supported_Network_Packet_Type_List_PANU);
 
-								for (int aaa = 0; aaa < VALUE.protocols[c]->pdsp->num_of_Supported_Network_Packet_Type_List_PANU; aaa++)
+								for (int aaa = 0; aaa < VALUE->protocols[c]->pdsp->num_of_Supported_Network_Packet_Type_List_PANU; aaa++)
 								{
-									Console::WriteLine("\tnetwork packet type [0x{0:X4}][{1}]\n", VALUE.protocols[c]->pdsp->Supported_Network_Packet_Type_List[aaa], getNetworkPacketTypeString((short)VALUE.protocols[c]->pdsp->Supported_Network_Packet_Type_List[aaa]));
+									Console::WriteLine("\tnetwork packet type [0x{0:X4}][{1}]\n", VALUE->protocols[c]->pdsp->Supported_Network_Packet_Type_List[aaa], getNetworkPacketTypeString((short)VALUE->protocols[c]->pdsp->Supported_Network_Packet_Type_List[aaa]));
 								}
 							}
 						}
 					}
 				}
-				else if (VALUE._BNEP_flag != 1)
+				else if (VALUE->_BNEP_flag != 1)
 				{
 					/* za vse protokole ki niso BNEP */
 
 					Console::WriteLine("Protocol [{0}]:", c);
 
 					Console::Write("\tValue: ");
-					for (int d = 0; d < VALUE.protocols[c]->additional_bits_for_size; d++)
-						Console::Write("0x{0:X} ", VALUE.protocols[c]->value[d]);
+					for (int d = 0; d < VALUE->protocols[c]->additional_bits_for_size; d++)
+						Console::Write("0x{0:X} ", VALUE->protocols[c]->value[d]);
 					Console::WriteLine("");
 
-					Console::WriteLine("\tID [0x{0:X4}][{1}]", VALUE.protocols[c]->protocol_id, getProtocolTypeString(VALUE.protocols[c]->protocol_id));
-					if (VALUE.protocols[c]->additional_parameters_flag)
+					Console::WriteLine("\tID [0x{0:X4}][{1}]", VALUE->protocols[c]->protocol_id, getProtocolTypeString(VALUE->protocols[c]->protocol_id));
+					if (VALUE->protocols[c]->additional_parameters_flag)
 					{
 						if (dd.service_class_id_in_use == SDP::Handsfree ||
 							dd.service_class_id_in_use == SDP::Headset ||
@@ -439,7 +447,7 @@ namespace CLI_DEFAULT
 							dd.service_class_id_in_use == SDP::Message_Access_Profile ||
 							dd.service_class_id_in_use == SDP::GenericAudio
 							)
-							Console::WriteLine("\tChannel number: {0}", VALUE.protocols[c]->pdsp->server_channel_num);
+							Console::WriteLine("\tChannel number: {0}", VALUE->protocols[c]->pdsp->server_channel_num);
 
 						if (dd.service_class_id_in_use == SDP::AudioSource ||
 							dd.service_class_id_in_use == SDP::AudioSink ||
@@ -450,14 +458,14 @@ namespace CLI_DEFAULT
 							dd.service_class_id_in_use == SDP::_NAP
 							)
 						{
-							if (VALUE.protocols[c]->protocol_id == SDP::_L2CAP)
-								Console::WriteLine("\tPSM: 0x{0:X4}", VALUE.protocols[c]->pdsp->PSM);
+							if (VALUE->protocols[c]->protocol_id == SDP::_L2CAP)
+								Console::WriteLine("\tPSM: 0x{0:X4}", VALUE->protocols[c]->pdsp->PSM);
 
-							if (VALUE.protocols[c]->protocol_id == SDP::_AVDTP ||
-								VALUE.protocols[c]->protocol_id == SDP::_AVCTP ||
-								VALUE.protocols[c]->protocol_id == SDP::_BNEP
+							if (VALUE->protocols[c]->protocol_id == SDP::_AVDTP ||
+								VALUE->protocols[c]->protocol_id == SDP::_AVCTP ||
+								VALUE->protocols[c]->protocol_id == SDP::_BNEP
 								)
-								Console::WriteLine("\tVersion: 0x{0:X4}", VALUE.protocols[c]->pdsp->Version);
+								Console::WriteLine("\tVersion: 0x{0:X4}", VALUE->protocols[c]->pdsp->Version);
 						}
 					}
 				}
@@ -473,10 +481,10 @@ namespace CLI_DEFAULT
 			System::String^ service_name;
 
 
-		} ;
-		//} VALUE;
-
+		};
+		
 		VV^ VALUE;
+
 		template<class T>
 		void print(T v, IOCTL_S::DEFAULT_DATA dd)
 		{
@@ -498,7 +506,9 @@ namespace CLI_DEFAULT
 		{
 			System::String^ provider_name;
 
-		} VALUE;
+		};
+
+		VV^ VALUE;
 
 		template<class T>
 		void print(T v, IOCTL_S::DEFAULT_DATA dd)
@@ -510,7 +520,7 @@ namespace CLI_DEFAULT
 			printVALUE_ELEMENT(v, dd);
 
 			Console::Write("Provider name: ");
-			Console::Write(VALUE.provider_name);
+			Console::Write(VALUE->provider_name);
 			Console::WriteLine("");
 		}
 	};
@@ -527,7 +537,9 @@ namespace CLI_DEFAULT
 			// samo za vec profilov
 			//int num_Profiles_list;
 			//BLUETOOTH_PROFILE* pProfile_list;
-		} VALUE;
+		};
+
+		VV^ VALUE;
 
 		template<class T>
 		void print(T v, IOCTL_S::DEFAULT_DATA dd)
@@ -538,8 +550,8 @@ namespace CLI_DEFAULT
 			printATTR_ELEMENT(&dd);
 			printVALUE_ELEMENT(v, dd);
 
-			Console::WriteLine("Profile UUID: 0x{0:X4}", VALUE.profile_UUID);
-			Console::WriteLine("Profile version: 0x{0:X4}", VALUE.profile_version);
+			Console::WriteLine("Profile UUID: 0x{0:X4}", VALUE->profile_UUID);
+			Console::WriteLine("Profile version: 0x{0:X4}", VALUE->profile_version);
 			Console::WriteLine("");
 		}
 	};
@@ -553,7 +565,9 @@ namespace CLI_DEFAULT
 			SHORT triplet_id_natural_lang;
 			SHORT triplet_id_char_encoding;
 			SHORT triplet_attribute_id;
-		} VALUE;
+		};
+
+		VV^ VALUE;
 
 		template<class T>
 		void print(T v, IOCTL_S::DEFAULT_DATA dd)
@@ -564,9 +578,9 @@ namespace CLI_DEFAULT
 			printATTR_ELEMENT(&dd);
 			printVALUE_ELEMENT(v, dd);
 
-			Console::WriteLine("Natural language ID: 0x{0:X4}", VALUE.triplet_id_natural_lang);
-			Console::WriteLine("Character encoding ID: 0x{0:X4}", VALUE.triplet_id_char_encoding);
-			Console::WriteLine("Attribute ID: 0x{0:X4}", VALUE.triplet_attribute_id);
+			Console::WriteLine("Natural language ID: 0x{0:X4}", VALUE->triplet_id_natural_lang);
+			Console::WriteLine("Character encoding ID: 0x{0:X4}", VALUE->triplet_id_char_encoding);
+			Console::WriteLine("Attribute ID: 0x{0:X4}", VALUE->triplet_attribute_id);
 			Console::WriteLine("");
 		}
 	};
@@ -577,7 +591,9 @@ namespace CLI_DEFAULT
 		{
 			System::String^ description;
 
-		} VALUE;
+		};
+
+		VV^ VALUE;
 
 		template<class T>
 		void print(T v, IOCTL_S::DEFAULT_DATA dd)
@@ -589,7 +605,7 @@ namespace CLI_DEFAULT
 			printVALUE_ELEMENT(v, dd);
 
 			Console::Write("Description: ");
-			Console::Write(VALUE.description);
+			Console::Write(VALUE->description);
 			Console::WriteLine("");
 		}
 	};
@@ -617,23 +633,12 @@ namespace A2DP
 {
 	public ref struct CLI_SUPPORTED_FEATURES_DATA
 	{
+	public:
 		BYTE a0;
 		BYTE a1;
 		BYTE a2;
 		BYTE a3;
-
-		array<System::String^>^ Test()
-		{
-			array< System::String^ >^ local = gcnew array< System::String^ >(4);
-
-			local[0] = "Player\n";
-			local[1] = "Microphone\n";
-			local[2] = "Tuner\n";
-			local[3] = "Mixer\n";
-			
-			return local;
-		}
-
+	
 		System::String^ getSupportedFeaturesString()
 		{
 			array<System::String^>^ text = Test();
@@ -662,6 +667,19 @@ namespace A2DP
 
 			return temp;
 		}
+
+	private:
+		array<System::String^>^ Test()
+		{
+			array< System::String^ >^ local = gcnew array< System::String^ >(4);
+
+			local[0] = "Player\n";
+			local[1] = "Microphone\n";
+			local[2] = "Tuner\n";
+			local[3] = "Mixer\n";
+
+			return local;
+		}
 	};
 	
 	public ref struct CLI_SUPPORTED_FEATURES : CLI_DEFAULT::CLI_DEFAULT_OBJECT
@@ -672,7 +690,9 @@ namespace A2DP
 
 			CLI_SUPPORTED_FEATURES_DATA^ sfds;
 
-		} VALUE;
+		};
+
+		VV^ VALUE;
 
 		template<class T>
 		void print(T v, IOCTL_S::DEFAULT_DATA dd)
@@ -683,8 +703,8 @@ namespace A2DP
 			printATTR_ELEMENT(&dd);
 			printVALUE_ELEMENT(v, dd);
 
-			Console::WriteLine("{0} 0x{1:X4}", VALUE_7, VALUE.supported_features_value);
-			Console::WriteLine("{0}", VALUE.sfds->getSupportedFeaturesString());
+			Console::WriteLine("{0} 0x{1:X4}", VALUE_7, VALUE->supported_features_value);
+			Console::WriteLine("{0}", VALUE->sfds->getSupportedFeaturesString());
 		}
 
 	};
@@ -868,7 +888,9 @@ namespace AVRCP
 
 			CLI_SUPPORTED_FEATURES_DATA^ sfds;
 
-		} VALUE;
+		};
+
+		VV^ VALUE;
 
 		template<class T>
 		void print(T v, IOCTL_S::DEFAULT_DATA dd)
@@ -879,17 +901,17 @@ namespace AVRCP
 			printATTR_ELEMENT(&dd);
 			printVALUE_ELEMENT(v, dd);
 
-			Console::WriteLine("{0} 0x{1:X4}", VALUE_7, VALUE.supported_features_value);
+			Console::WriteLine("{0} 0x{1:X4}", VALUE_7, VALUE->supported_features_value);
 
 			if (dd.temp_class_id == SDP::A_V_RemoteControlTarget)
 			{
-				Console::WriteLine("{0}", VALUE.sfds->getSupportedFeaturesString_AVRCT());
+				Console::WriteLine("{0}", VALUE->sfds->getSupportedFeaturesString_AVRCT());
 			}
 
 			if (dd.temp_class_id == SDP::A_V_RemoteControl ||
 				dd.temp_class_id == SDP::A_V_RemoteControlController
 				)
-				Console::WriteLine("{0}", VALUE.sfds->getSupportedFeaturesString_AVRC_AVRCC());
+				Console::WriteLine("{0}", VALUE->sfds->getSupportedFeaturesString_AVRC_AVRCC());
 
 		};
 	};
@@ -1149,7 +1171,9 @@ namespace MAP
 		{
 			SHORT GoepL2CapPsm_value;
 
-		} VALUE;
+		};
+
+		VV^ VALUE;
 
 		template<class T>
 		void print(T v, IOCTL_S::DEFAULT_DATA dd)
@@ -1160,7 +1184,7 @@ namespace MAP
 			printATTR_ELEMENT(&dd);
 			printVALUE_ELEMENT(v, dd);
 
-			Console::WriteLine("GoepL2CapPsm value: 0x{0:X4}", VALUE.GoepL2CapPsm_value);
+			Console::WriteLine("GoepL2CapPsm value: 0x{0:X4}", VALUE->GoepL2CapPsm_value);
 			Console::WriteLine("");
 		};
 	};
@@ -1171,7 +1195,9 @@ namespace MAP
 		{
 			CLI_SUPPORTED_FEATURES_MESSAGES^ sfm;
 
-		} VALUE;
+		};
+
+		VV^ VALUE;
 
 		template<class T>
 		void print(T v, IOCTL_S::DEFAULT_DATA dd)
@@ -1182,7 +1208,7 @@ namespace MAP
 			printATTR_ELEMENT(&dd);
 			printVALUE_ELEMENT(v, dd);
 
-			Console::WriteLine("Message types: \n{0}\n", VALUE.sfm->getMessageTypesString());
+			Console::WriteLine("Message types: \n{0}\n", VALUE->sfm->getMessageTypesString());
 		}
 	};
 
@@ -1192,7 +1218,9 @@ namespace MAP
 		{
 			BYTE instance_ID;
 
-		} VALUE;
+		};
+
+		VV^ VALUE;
 
 		template<class T>
 		void print(T v, IOCTL_S::DEFAULT_DATA dd)
@@ -1203,7 +1231,7 @@ namespace MAP
 			printATTR_ELEMENT(&dd);
 			printVALUE_ELEMENT(v, dd);
 
-			Console::WriteLine("MAS instance ID: 0x{0:X2}", VALUE.instance_ID);
+			Console::WriteLine("MAS instance ID: 0x{0:X2}", VALUE->instance_ID);
 			Console::WriteLine("");
 		}
 	};
@@ -1214,7 +1242,9 @@ namespace MAP
 		{
 			CLI_SUPPORTED_FEATURES_MESSAGES^ sfm;
 
-		} VALUE;
+		};
+
+		VV^ VALUE;
 
 		template<class T>
 		void print(T v, IOCTL_S::DEFAULT_DATA dd)
@@ -1225,7 +1255,7 @@ namespace MAP
 			printATTR_ELEMENT(&dd);
 			printVALUE_ELEMENT(v, dd);
 
-			Console::WriteLine("Features: \n{0}\n", VALUE.sfm->getSupportedFeaturesString());
+			Console::WriteLine("Features: \n{0}\n", VALUE->sfm->getSupportedFeaturesString());
 		}
 	};
 }
@@ -1383,6 +1413,8 @@ namespace HFP
 
 	public ref struct CLI_NETWORK : CLI_DEFAULT::CLI_DEFAULT_OBJECT
 	{
+		VV^ VALUE;
+		
 		template<class T>
 		void print(T v, IOCTL_S::DEFAULT_DATA dd)
 		{
@@ -1393,7 +1425,7 @@ namespace HFP
 
 			printVALUE_ELEMENT(v, dd);
 
-			if((BYTE)VALUE.value[0] == (BYTE)0x01)
+			if((BYTE)VALUE->value[0] == (BYTE)0x01)
 				Console::WriteLine("Network: Ability to reject a call");
 			else
 				Console::WriteLine("Network: No ability to reject a call");
@@ -1408,7 +1440,9 @@ namespace HFP
 
 			CLI_SUPPORTED_FEATURES_DATA^ sfds;
 
-		} VALUE;
+		};
+
+		VV^ VALUE;
 
 		template<class T>
 		void print(T v, IOCTL_S::DEFAULT_DATA dd)
@@ -1419,12 +1453,12 @@ namespace HFP
 			printATTR_ELEMENT(&dd);
 			printVALUE_ELEMENT(v, dd);
 
-			Console::WriteLine("Supported features: 0x{0:X4}\n", VALUE.supported_features_value);
+			Console::WriteLine("Supported features: 0x{0:X4}\n", VALUE->supported_features_value);
 
 			if (dd.temp_service == SDP::HandsfreeAudioGateway)
-				Console::WriteLine("{0}", VALUE.sfds->getSupportedFeatures_AG_String());
+				Console::WriteLine("{0}", VALUE->sfds->getSupportedFeatures_AG_String());
 			else
-				Console::WriteLine("{0}", VALUE.sfds->getSupportedFeaturesString());
+				Console::WriteLine("{0}", VALUE->sfds->getSupportedFeaturesString());
 
 			Console::WriteLine("");
 		}
@@ -1435,6 +1469,8 @@ namespace HSP
 {
 	public ref struct CLI_REMOTE_AUDIO_VOLUME_CONTROL : CLI_DEFAULT::CLI_DEFAULT_OBJECT
 	{
+		VV^ VALUE;
+
 		template<class T>
 		void print(T v, IOCTL_S::DEFAULT_DATA dd)
 		{
@@ -1455,7 +1491,9 @@ namespace NAP
 		ref struct VV : CLI_VALUE
 		{
 			SHORT security_value;
-		} VALUE;
+		};
+
+		VV^ VALUE;
 
 		System::String^ getSecurityDescriptionString(SHORT type)
 		{
@@ -1488,7 +1526,7 @@ namespace NAP
 			printATTR_ELEMENT(&dd);
 			printVALUE_ELEMENT(v, dd);
 
-			Console::WriteLine("Security Description [0x{0:X4}][{1}]", VALUE.security_value, getSecurityDescriptionString(VALUE.security_value));
+			Console::WriteLine("Security Description [0x{0:X4}][{1}]", VALUE->security_value, getSecurityDescriptionString(VALUE->security_value));
 		}
 	};
 
@@ -1497,7 +1535,9 @@ namespace NAP
 		ref struct VV : CLI_VALUE
 		{
 			SHORT NetAccessType;
-		} VALUE;
+		};
+
+		VV^ VALUE;
 
 		System::String^ getNetAccessTypeString(SHORT type)
 		{
@@ -1578,7 +1618,7 @@ namespace NAP
 			printATTR_ELEMENT(&dd);
 			printVALUE_ELEMENT(v, dd);
 
-			Console::WriteLine("Type of Network Access Available[0x{0:X4}][{1}]", VALUE.NetAccessType, getNetAccessTypeString(VALUE.NetAccessType));
+			Console::WriteLine("Type of Network Access Available[0x{0:X4}][{1}]", VALUE->NetAccessType, getNetAccessTypeString(VALUE->NetAccessType));
 		}
 	};
 
@@ -1587,7 +1627,9 @@ namespace NAP
 		ref struct VV : CLI_VALUE
 		{
 			DWORD Maximum_possible_Network_Access_Data_Rate;
-		} VALUE;
+		};
+
+		VV^ VALUE;
 
 		template<class T>
 		void print(T v, IOCTL_S::DEFAULT_DATA dd)
@@ -1598,7 +1640,7 @@ namespace NAP
 			printATTR_ELEMENT(&dd);
 			printVALUE_ELEMENT(v, dd);
 
-			Console::WriteLine("Maximum possible Network Access Data Rate: 0x{0:X8}", VALUE.Maximum_possible_Network_Access_Data_Rate);
+			Console::WriteLine("Maximum possible Network Access Data Rate: 0x{0:X8}", VALUE->Maximum_possible_Network_Access_Data_Rate);
 			Console::WriteLine("");
 		}
 	};
@@ -1608,6 +1650,8 @@ namespace OBEX
 {
 	public ref struct CLI_SERVICE_VERSION : CLI_DEFAULT::CLI_DEFAULT_OBJECT
 	{
+		VV^ VALUE;
+
 		// TODO: naredi do konca, ko bos imel example
 	};
 
@@ -1618,7 +1662,9 @@ namespace OBEX
 			int num_of_formats;
 			array<System::Byte^>^ formats;
 
-		} VALUE;
+		};
+
+		VV^ VALUE;
 
 		array<System::String^>^ Test1_SupportedFormats()
 		{
@@ -1686,11 +1732,11 @@ namespace OBEX
 			printATTR_ELEMENT(&dd);
 			printVALUE_ELEMENT(v, dd);
 
-			Console::WriteLine("Number of supported formats: {0}", VALUE.num_of_formats);
+			Console::WriteLine("Number of supported formats: {0}", VALUE->num_of_formats);
 
 			Console::WriteLine("Supported formats: ");
-			for (int aa = 0; aa < VALUE.num_of_formats; aa++)
-				Console::Write("0x{0:X2} ", VALUE.formats[aa]);
+			for (int aa = 0; aa < VALUE->num_of_formats; aa++)
+				Console::Write("0x{0:X2} ", VALUE->formats[aa]);
 			Console::WriteLine("");
 
 			Console::WriteLine("Formats: \n{0}\n", getSupportedFormatsString(v.formats, v.num_of_formats));
@@ -1760,7 +1806,9 @@ namespace PBAP
 		{
 			CLI_SUPPORTED_REPOSITORIES_DATA^ srs;
 
-		} VALUE;
+		};
+
+		VV^ VALUE;
 
 		template<class T>
 		void print(T v, IOCTL_S::DEFAULT_DATA dd)
@@ -1771,12 +1819,14 @@ namespace PBAP
 			printATTR_ELEMENT(&dd);
 			printVALUE_ELEMENT(v, dd);
 
-			Console::WriteLine("Repositories: \n{0}\n", VALUE.srs->getSupportedRepositoriesString());
+			Console::WriteLine("Repositories: \n{0}\n", VALUE->srs->getSupportedRepositoriesString());
 		}
 	};
 
 	public ref struct CLI_PBAP_SUPPORTED_FEATURES : CLI_DEFAULT::CLI_DEFAULT_OBJECT
 	{
+		VV^ VALUE;
+		
 		template<class T>
 		void print(T v, IOCTL_S::DEFAULT_DATA dd)
 		{
@@ -1787,15 +1837,14 @@ namespace PBAP
 			printVALUE_ELEMENT(v, dd);
 		}
 	};
-
-
-
 }
 
 namespace PNPINFO
 {
 	public ref struct CLI_INFO : CLI_DEFAULT::CLI_DEFAULT_OBJECT
 	{
+		VV^ VALUE;
+		
 		SHORT SpecificationID;
 		SHORT VendorID;
 		SHORT ProductID;

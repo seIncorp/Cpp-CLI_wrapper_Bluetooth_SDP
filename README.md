@@ -250,7 +250,8 @@ data.CLI_connectToDevice("\\\\?\\GLOBALROOT\\Device\\USBPDO-4");
 data.CLI_SDPsearch("XX:XX:XX:XX:XX:XX");
 
 // 6. exporting data
-
+Console.WriteLine("{0}",data.a2dp_export.default_export.service_name_handle_export.VALUE.service_name);
+Console.WriteLine("{0:X}",data.a2dp_export.default_export.class_id_handle_export.VALUE.classes[0].value);
 
 // 7. close the connection
 data.CLI_closeConnectionToDevice();

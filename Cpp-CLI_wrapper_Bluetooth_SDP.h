@@ -372,11 +372,11 @@ public ref struct CLI_SDP_settings
 	- PREVERI: preveri vsak attr posebej pri searchenju
 	- DODAJ: preveri ali je kaksen attr. enabled za search drugace se ne sme izvesti SDP  in isto za service, ker drugace je error
 	- DODAJ: se za PANU service
+	
+
 	- PREVERI/DODAJ/POPRAVI: app javi da ni kompatibilno VALUE ko se exporta iz objekta (resitev: kreiranje instance objekta in potem dodajanje podatkov, uredi tudi brisanje tega)
-	(resitev: glej SERVICE_NAME exportanje in naredi na vseh ostalih takole)
-	- POPRAVI: vrstni red brisanja pointerjev (example: glej delete_exported_data_A2DP)
-
-
+	(resitev: glej SERVICE_NAME exportanje in naredi na vseh ostalih takole)	<-- DONE !!
+	- POPRAVI: vrstni red brisanja pointerjev (example: glej delete_exported_data_A2DP)	<-- DONE !!
 	- PREVERI: A_V_RemoteControlTarget in A_V_RemoteControlController <-- zakaj ne vrne, kje tezava v native ali tukaj <-- DONE !!
 	- UREDI: da se pri shranjevanju exported tudi preveri ali sploh obstajajo podatki	<-- DONE !!
 	- UREDI: glede printanja od native C++ (najbolje posebej kar se dobi data od native) (najbolje da se naredi nov struct) <-- DONE !!
@@ -397,6 +397,7 @@ public ref struct CLI_SDP_settings
 	- DODAJ: ERROR_BAD_NETPATH --> 0x35
 	- DODAJ: ERROR_INVALID_HANDLE --> 0x6
 	- POPRAVI: v native popravi text izpis za A_V_RemoteControlController
+	- DODAJ: se za PANU service
 
 
 
@@ -546,36 +547,36 @@ public:
 	!CLI_DEFAULT_DATA();
 
 
-void CLI_connectToDevice(System::String^ str);
-void CLI_closeConnectionToDevice();
+	void CLI_connectToDevice(System::String^ str);
+	void CLI_closeConnectionToDevice();
 
 	// reset to false all service and attr. 
-void CLI_reset_SDP_service_for_search();
-void CLI_reset_attr_search_for_service();
+	void CLI_reset_SDP_service_for_search();
+	void CLI_reset_attr_search_for_service();
 
 	// set all, specific service for search
-void CLI_set_all_SDP_service_for_search();
-void CLI_set_SDP_service_for_search(Int16 service);
-void CLI_disable_SDP_service_for_search(Int16 service);
+	void CLI_set_all_SDP_service_for_search();
+	void CLI_set_SDP_service_for_search(Int16 service);
+	void CLI_disable_SDP_service_for_search(Int16 service);
 
 	// set all, default and specific attr. for search
-void CLI_set_all_attr_of_SDP_service_for_search();
-void CLI_set_default_attr_of_SDP_service_for_search(Int16 attr);
-void CLI_set_service_specific_attr_of_SDP_service_for_search(Int16 service, Int16 attr);
+	void CLI_set_all_attr_of_SDP_service_for_search();
+	void CLI_set_default_attr_of_SDP_service_for_search(Int16 attr);
+	void CLI_set_service_specific_attr_of_SDP_service_for_search(Int16 service, Int16 attr);
 
 
 	// functions for different data
-void CLI_SDPsearch(System::String^ str);
-void CLI_getBthDeviceInfo();
-void CLI_getLocalBthInfo();
+	void CLI_SDPsearch(System::String^ str);
+	void CLI_getBthDeviceInfo();
+	void CLI_getLocalBthInfo();
 
 
 
-void CLI_set_all_default_attr_print();
-void CLI_disable_all_default_attr_print();
-void CLI_set_default_attr_print(Int16 def_attr, int onOff);
-void CLI_set_all_specific_attrs_service_print(Int16 service, int onOff);
-void CLI_set_specific_attr_service_print(Int16 service, Int16 attr, int onOff);
+	void CLI_set_all_default_attr_print();
+	void CLI_disable_all_default_attr_print();
+	void CLI_set_default_attr_print(Int16 def_attr, int onOff);
+	void CLI_set_all_specific_attrs_service_print(Int16 service, int onOff);
+	void CLI_set_specific_attr_service_print(Int16 service, Int16 attr, int onOff);
 
 
 
@@ -618,11 +619,14 @@ private:
 		{
 			main->default_export->record_handle_export = gcnew CLI_DEFAULT::CLI_SERVICE_RECORD();
 
+			main->default_export->record_handle_export->VALUE = gcnew CLI_DEFAULT::CLI_SERVICE_RECORD::VV();
+
 			save_default_data_of_attr<CLI_DEFAULT::CLI_SERVICE_RECORD^, SDP::SERVICE_RECORD*>(
 				main->default_export->record_handle_export,
 				dd,
 				((B)submain)->default_export->record_handle_export
 				);
+
 			DWORD temp = 0x00;
 			temp |= ((B)submain)->default_export->record_handle_export->VALUE.value[0];
 			temp <<= 8;
@@ -631,7 +635,7 @@ private:
 			temp |= ((B)submain)->default_export->record_handle_export->VALUE.value[2];
 			temp <<= 8;
 			temp |= ((B)submain)->default_export->record_handle_export->VALUE.value[3];
-			main->default_export->record_handle_export->VALUE.handle = temp;
+			main->default_export->record_handle_export->VALUE->handle = temp;
 		}
 
 		//  SERVICE_CLASS_ID_LIST
@@ -639,22 +643,24 @@ private:
 		{
 			main->default_export->class_id_handle_export = gcnew CLI_DEFAULT::CLI_SERVICE_CLASS_ID_LIST();
 
+			main->default_export->class_id_handle_export->VALUE = gcnew CLI_DEFAULT::CLI_SERVICE_CLASS_ID_LIST::VV();
+
 			save_default_data_of_attr<CLI_DEFAULT::CLI_SERVICE_CLASS_ID_LIST^, SDP::SERVICE_CLASS_ID_LIST*>(
 				main->default_export->class_id_handle_export,
 				dd,
 				((B)submain)->default_export->class_id_handle_export
 				);
 
-			main->default_export->class_id_handle_export->VALUE.num_classes = ((B)submain)->default_export->class_id_handle_export->VALUE.num_classes;
+			main->default_export->class_id_handle_export->VALUE->num_classes = ((B)submain)->default_export->class_id_handle_export->VALUE.num_classes;
 
-			main->default_export->class_id_handle_export->VALUE.classes = gcnew array<CLI_SERVICE_CLASS^>(main->default_export->class_id_handle_export->VALUE.num_classes);
+			main->default_export->class_id_handle_export->VALUE->classes = gcnew array<CLI_SERVICE_CLASS^>(main->default_export->class_id_handle_export->VALUE->num_classes);
 			// TODO: preveri za element v classes ce se sploh uporablja
-			for (int a = 0; a < main->default_export->class_id_handle_export->VALUE.num_classes; a++)
+			for (int a = 0; a < main->default_export->class_id_handle_export->VALUE->num_classes; a++)
 			{
-				main->default_export->class_id_handle_export->VALUE.classes[a] = gcnew CLI_SERVICE_CLASS();
-				main->default_export->class_id_handle_export->VALUE.classes[a]->element = gcnew CLI_ATTRIBUTE_ID_ELEMENT();
-				main->default_export->class_id_handle_export->VALUE.classes[a]->additional_bits_flag = ((B)submain)->default_export->class_id_handle_export->VALUE.classes[a].additional_bits_flag;
-				main->default_export->class_id_handle_export->VALUE.classes[a]->value = ((B)submain)->default_export->class_id_handle_export->VALUE.classes[a].value;
+				main->default_export->class_id_handle_export->VALUE->classes[a] = gcnew CLI_SERVICE_CLASS();
+				main->default_export->class_id_handle_export->VALUE->classes[a]->element = gcnew CLI_ATTRIBUTE_ID_ELEMENT();
+				main->default_export->class_id_handle_export->VALUE->classes[a]->additional_bits_flag = ((B)submain)->default_export->class_id_handle_export->VALUE.classes[a].additional_bits_flag;
+				main->default_export->class_id_handle_export->VALUE->classes[a]->value = ((B)submain)->default_export->class_id_handle_export->VALUE.classes[a].value;
 			}
 		}
 
@@ -663,6 +669,8 @@ private:
 		{
 			main->default_export->protocol_descriptor_list_handle_export = gcnew CLI_DEFAULT::CLI_PROTOCOL_DESCRIPTOR_LIST();
 
+			main->default_export->protocol_descriptor_list_handle_export->VALUE = gcnew CLI_DEFAULT::CLI_PROTOCOL_DESCRIPTOR_LIST::VV();
+
 			save_default_data_of_attr<CLI_DEFAULT::CLI_PROTOCOL_DESCRIPTOR_LIST^, SDP::PROTOCOL_DESCRIPTOR_LIST*>(
 				main->default_export->protocol_descriptor_list_handle_export,
 				dd,
@@ -670,42 +678,42 @@ private:
 				);
 
 
-			main->default_export->protocol_descriptor_list_handle_export->VALUE.num_protocols = ((B)submain)->default_export->protocol_descriptor_list_handle_export->VALUE.num_protocols;
-			main->default_export->protocol_descriptor_list_handle_export->VALUE._BNEP_flag = ((B)submain)->default_export->protocol_descriptor_list_handle_export->VALUE._BNEP_flag;
+			main->default_export->protocol_descriptor_list_handle_export->VALUE->num_protocols = ((B)submain)->default_export->protocol_descriptor_list_handle_export->VALUE.num_protocols;
+			main->default_export->protocol_descriptor_list_handle_export->VALUE->_BNEP_flag = ((B)submain)->default_export->protocol_descriptor_list_handle_export->VALUE._BNEP_flag;
 
-			main->default_export->protocol_descriptor_list_handle_export->VALUE.protocols = gcnew array<CLI_PROTOCOL_DESCRIPTOR^>(((B)submain)->default_export->protocol_descriptor_list_handle_export->VALUE.num_protocols);
+			main->default_export->protocol_descriptor_list_handle_export->VALUE->protocols = gcnew array<CLI_PROTOCOL_DESCRIPTOR^>(((B)submain)->default_export->protocol_descriptor_list_handle_export->VALUE.num_protocols);
 
 			for (int i = 0; i < ((B)submain)->default_export->protocol_descriptor_list_handle_export->VALUE.num_protocols; i++)
 			{
-				main->default_export->protocol_descriptor_list_handle_export->VALUE.protocols[i] = gcnew CLI_PROTOCOL_DESCRIPTOR();
+				main->default_export->protocol_descriptor_list_handle_export->VALUE->protocols[i] = gcnew CLI_PROTOCOL_DESCRIPTOR();
 
-				main->default_export->protocol_descriptor_list_handle_export->VALUE.protocols[i]->size_bytes = ((B)submain)->default_export->protocol_descriptor_list_handle_export->VALUE.protocols[i].size_bytes;
-				main->default_export->protocol_descriptor_list_handle_export->VALUE.protocols[i]->additional_bits_flag = ((B)submain)->default_export->protocol_descriptor_list_handle_export->VALUE.protocols[i].additional_bits_flag;
-				main->default_export->protocol_descriptor_list_handle_export->VALUE.protocols[i]->additional_bits_for_size = ((B)submain)->default_export->protocol_descriptor_list_handle_export->VALUE.protocols[i].additional_bits_for_size;
+				main->default_export->protocol_descriptor_list_handle_export->VALUE->protocols[i]->size_bytes = ((B)submain)->default_export->protocol_descriptor_list_handle_export->VALUE.protocols[i].size_bytes;
+				main->default_export->protocol_descriptor_list_handle_export->VALUE->protocols[i]->additional_bits_flag = ((B)submain)->default_export->protocol_descriptor_list_handle_export->VALUE.protocols[i].additional_bits_flag;
+				main->default_export->protocol_descriptor_list_handle_export->VALUE->protocols[i]->additional_bits_for_size = ((B)submain)->default_export->protocol_descriptor_list_handle_export->VALUE.protocols[i].additional_bits_for_size;
 
-				main->default_export->protocol_descriptor_list_handle_export->VALUE.protocols[i]->value = gcnew array< BYTE >(((B)submain)->default_export->protocol_descriptor_list_handle_export->VALUE.protocols[i].additional_bits_for_size);
+				main->default_export->protocol_descriptor_list_handle_export->VALUE->protocols[i]->value = gcnew array< BYTE >(((B)submain)->default_export->protocol_descriptor_list_handle_export->VALUE.protocols[i].additional_bits_for_size);
 				for (int a = 0; a < ((B)submain)->default_export->protocol_descriptor_list_handle_export->VALUE.protocols[i].additional_bits_for_size; a++)
 				{
-					main->default_export->protocol_descriptor_list_handle_export->VALUE.protocols[i]->value[a] = ((B)submain)->default_export->protocol_descriptor_list_handle_export->VALUE.protocols[i].value[a];
+					main->default_export->protocol_descriptor_list_handle_export->VALUE->protocols[i]->value[a] = ((B)submain)->default_export->protocol_descriptor_list_handle_export->VALUE.protocols[i].value[a];
 				}
 
-				main->default_export->protocol_descriptor_list_handle_export->VALUE.protocols[i]->protocol_id = ((B)submain)->default_export->protocol_descriptor_list_handle_export->VALUE.protocols[i].protocol_id;
-				main->default_export->protocol_descriptor_list_handle_export->VALUE.protocols[i]->additional_parameters_flag = ((B)submain)->default_export->protocol_descriptor_list_handle_export->VALUE.protocols[i].additional_parameters_flag;
+				main->default_export->protocol_descriptor_list_handle_export->VALUE->protocols[i]->protocol_id = ((B)submain)->default_export->protocol_descriptor_list_handle_export->VALUE.protocols[i].protocol_id;
+				main->default_export->protocol_descriptor_list_handle_export->VALUE->protocols[i]->additional_parameters_flag = ((B)submain)->default_export->protocol_descriptor_list_handle_export->VALUE.protocols[i].additional_parameters_flag;
 
 				if (((B)submain)->default_export->protocol_descriptor_list_handle_export->VALUE.protocols[i].pdsp != NULL)
 				{
-					main->default_export->protocol_descriptor_list_handle_export->VALUE.protocols[i]->pdsp = gcnew CLI_PROTOCOL_DESCRIPTOR_SPECIFIC_PARAMETER();
-					main->default_export->protocol_descriptor_list_handle_export->VALUE.protocols[i]->pdsp->server_channel_num = ((B)submain)->default_export->protocol_descriptor_list_handle_export->VALUE.protocols[i].pdsp->server_channel_num;
-					main->default_export->protocol_descriptor_list_handle_export->VALUE.protocols[i]->pdsp->PSM = ((B)submain)->default_export->protocol_descriptor_list_handle_export->VALUE.protocols[i].pdsp->PSM;
-					main->default_export->protocol_descriptor_list_handle_export->VALUE.protocols[i]->pdsp->Version = ((B)submain)->default_export->protocol_descriptor_list_handle_export->VALUE.protocols[i].pdsp->Version;
+					main->default_export->protocol_descriptor_list_handle_export->VALUE->protocols[i]->pdsp = gcnew CLI_PROTOCOL_DESCRIPTOR_SPECIFIC_PARAMETER();
+					main->default_export->protocol_descriptor_list_handle_export->VALUE->protocols[i]->pdsp->server_channel_num = ((B)submain)->default_export->protocol_descriptor_list_handle_export->VALUE.protocols[i].pdsp->server_channel_num;
+					main->default_export->protocol_descriptor_list_handle_export->VALUE->protocols[i]->pdsp->PSM = ((B)submain)->default_export->protocol_descriptor_list_handle_export->VALUE.protocols[i].pdsp->PSM;
+					main->default_export->protocol_descriptor_list_handle_export->VALUE->protocols[i]->pdsp->Version = ((B)submain)->default_export->protocol_descriptor_list_handle_export->VALUE.protocols[i].pdsp->Version;
 
-					main->default_export->protocol_descriptor_list_handle_export->VALUE.protocols[i]->pdsp->additional_bits_flag_PANU = ((B)submain)->default_export->protocol_descriptor_list_handle_export->VALUE.protocols[i].pdsp->additional_bits_flag_PANU;
-					main->default_export->protocol_descriptor_list_handle_export->VALUE.protocols[i]->pdsp->additional_bits_for_size_PANU = ((B)submain)->default_export->protocol_descriptor_list_handle_export->VALUE.protocols[i].pdsp->additional_bits_for_size_PANU;
-					main->default_export->protocol_descriptor_list_handle_export->VALUE.protocols[i]->pdsp->num_of_Supported_Network_Packet_Type_List_PANU = ((B)submain)->default_export->protocol_descriptor_list_handle_export->VALUE.protocols[i].pdsp->num_of_Supported_Network_Packet_Type_List_PANU;
+					main->default_export->protocol_descriptor_list_handle_export->VALUE->protocols[i]->pdsp->additional_bits_flag_PANU = ((B)submain)->default_export->protocol_descriptor_list_handle_export->VALUE.protocols[i].pdsp->additional_bits_flag_PANU;
+					main->default_export->protocol_descriptor_list_handle_export->VALUE->protocols[i]->pdsp->additional_bits_for_size_PANU = ((B)submain)->default_export->protocol_descriptor_list_handle_export->VALUE.protocols[i].pdsp->additional_bits_for_size_PANU;
+					main->default_export->protocol_descriptor_list_handle_export->VALUE->protocols[i]->pdsp->num_of_Supported_Network_Packet_Type_List_PANU = ((B)submain)->default_export->protocol_descriptor_list_handle_export->VALUE.protocols[i].pdsp->num_of_Supported_Network_Packet_Type_List_PANU;
 
-					main->default_export->protocol_descriptor_list_handle_export->VALUE.protocols[i]->pdsp->Supported_Network_Packet_Type_List = gcnew array<SHORT^>(((B)submain)->default_export->protocol_descriptor_list_handle_export->VALUE.protocols[i].pdsp->num_of_Supported_Network_Packet_Type_List_PANU);
+					main->default_export->protocol_descriptor_list_handle_export->VALUE->protocols[i]->pdsp->Supported_Network_Packet_Type_List = gcnew array<SHORT^>(((B)submain)->default_export->protocol_descriptor_list_handle_export->VALUE.protocols[i].pdsp->num_of_Supported_Network_Packet_Type_List_PANU);
 					for (int aaa = 0; aaa < ((B)submain)->default_export->protocol_descriptor_list_handle_export->VALUE.protocols[i].pdsp->num_of_Supported_Network_Packet_Type_List_PANU; aaa++)
-						main->default_export->protocol_descriptor_list_handle_export->VALUE.protocols[i]->pdsp->Supported_Network_Packet_Type_List[aaa] = ((B)submain)->default_export->protocol_descriptor_list_handle_export->VALUE.protocols[i].pdsp->Supported_Network_Packet_Type_List[aaa];
+						main->default_export->protocol_descriptor_list_handle_export->VALUE->protocols[i]->pdsp->Supported_Network_Packet_Type_List[aaa] = ((B)submain)->default_export->protocol_descriptor_list_handle_export->VALUE.protocols[i].pdsp->Supported_Network_Packet_Type_List[aaa];
 				}
 			}
 		}
@@ -716,44 +724,16 @@ private:
 			main->default_export->service_name_handle_export = gcnew CLI_DEFAULT::CLI_SERVICE_NAME();
 
 			main->default_export->service_name_handle_export->VALUE = gcnew CLI_DEFAULT::CLI_SERVICE_NAME::VV();
-			main->default_export->service_name_handle_export->VALUE->service_name = gcnew System::String("DELA TOLE!!!");
+			//main->default_export->service_name_handle_export->VALUE->service_name = gcnew System::String("DELA TOLE!!!");
 
-			/*save_default_data_of_attr<CLI_DEFAULT::CLI_SERVICE_NAME^, SDP::SERVICE_NAME*>(
+			save_default_data_of_attr<CLI_DEFAULT::CLI_SERVICE_NAME^, SDP::SERVICE_NAME*>(
 				main->default_export->service_name_handle_export,
 				dd,
 				((B)submain)->default_export->service_name_handle_export
-				);*/
+				);
 			
 
-			main->default_export->service_name_handle_export->attr_id = gcnew CLI_ATTR_ID();
-
-			main->default_export->service_name_handle_export->attr_id->size_bytes = ((B)submain)->default_export->service_name_handle_export->attr_id->size_bytes;
-			main->default_export->service_name_handle_export->attr_id->additional_bits_flag = ((B)submain)->default_export->service_name_handle_export->attr_id->additional_bits_flag;
-			main->default_export->service_name_handle_export->attr_id->additional_bits_for_size = ((B)submain)->default_export->service_name_handle_export->attr_id->additional_bits_for_size;
-
-			main->default_export->service_name_handle_export->attr_id->element = gcnew CLI_ATTRIBUTE_ID_ELEMENT();
-			main->default_export->service_name_handle_export->attr_id->element->element.size = ((B)submain)->default_export->service_name_handle_export->attr_id->element->element.size;
-			main->default_export->service_name_handle_export->attr_id->element->element.type = ((B)submain)->default_export->service_name_handle_export->attr_id->element->element.type;
-
-			main->default_export->service_name_handle_export->attr_id->value = gcnew array< BYTE^ >(((B)submain)->default_export->service_name_handle_export->attr_id->size_bytes);
-
-			for (int i = 0; i < ((B)submain)->default_export->service_name_handle_export->attr_id->size_bytes; i++)
-				main->default_export->service_name_handle_export->attr_id->value[i] = ((B)submain)->default_export->service_name_handle_export->attr_id->value[i];
-
-			main->default_export->service_name_handle_export->VALUE->element = gcnew CLI_ATTRIBUTE_ID_ELEMENT();
-			main->default_export->service_name_handle_export->VALUE->element->element.size = ((B)submain)->default_export->service_name_handle_export->VALUE.element->element.size;
-			main->default_export->service_name_handle_export->VALUE->element->element.type = ((B)submain)->default_export->service_name_handle_export->VALUE.element->element.type;
-
-			main->default_export->service_name_handle_export->VALUE->size_bytes = ((B)submain)->default_export->service_name_handle_export->VALUE.size_bytes;
-			main->default_export->service_name_handle_export->VALUE->additional_bits_flag = ((B)submain)->default_export->service_name_handle_export->VALUE.additional_bits_flag;
-			main->default_export->service_name_handle_export->VALUE->additional_bits_for_size = ((B)submain)->default_export->service_name_handle_export->VALUE.additional_bits_for_size;
-			main->default_export->service_name_handle_export->VALUE->size_bytes_additional = ((B)submain)->default_export->service_name_handle_export->VALUE.size_bytes_additional;
-
-			main->default_export->service_name_handle_export->VALUE->value = gcnew array< BYTE^ >(((B)submain)->default_export->service_name_handle_export->VALUE.size_bytes);
-
-			for (int i = 0; i < ((B)submain)->default_export->service_name_handle_export->VALUE.size_bytes; i++)
-				main->default_export->service_name_handle_export->VALUE->value[i] = ((B)submain)->default_export->service_name_handle_export->VALUE.value[i];
-
+			
 
 			main->default_export->service_name_handle_export->VALUE->service_name = gcnew System::String(((B)submain)->default_export->service_name_handle_export->VALUE.service_name);
 		}
@@ -763,6 +743,8 @@ private:
 		{
 			main->default_export->bluetooth_profile_descriptor_list_handle_export = gcnew CLI_DEFAULT::CLI_BLUETOOTH_PROFILE_DESCRIPTOR_LIST();
 
+			main->default_export->bluetooth_profile_descriptor_list_handle_export->VALUE = gcnew CLI_DEFAULT::CLI_BLUETOOTH_PROFILE_DESCRIPTOR_LIST::VV();
+
 			save_default_data_of_attr<CLI_DEFAULT::CLI_BLUETOOTH_PROFILE_DESCRIPTOR_LIST^, SDP::BLUETOOTH_PROFILE_DESCRIPTOR_LIST*>(
 				main->default_export->bluetooth_profile_descriptor_list_handle_export,
 				dd,
@@ -770,8 +752,8 @@ private:
 				);
 
 
-			main->default_export->bluetooth_profile_descriptor_list_handle_export->VALUE.profile_UUID = ((B)submain)->default_export->bluetooth_profile_descriptor_list_handle_export->VALUE.profile_UUID;
-			main->default_export->bluetooth_profile_descriptor_list_handle_export->VALUE.profile_version = ((B)submain)->default_export->bluetooth_profile_descriptor_list_handle_export->VALUE.profile_version;
+			main->default_export->bluetooth_profile_descriptor_list_handle_export->VALUE->profile_UUID = ((B)submain)->default_export->bluetooth_profile_descriptor_list_handle_export->VALUE.profile_UUID;
+			main->default_export->bluetooth_profile_descriptor_list_handle_export->VALUE->profile_version = ((B)submain)->default_export->bluetooth_profile_descriptor_list_handle_export->VALUE.profile_version;
 		}
 
 		//  PROVIDER_NAME
@@ -779,13 +761,15 @@ private:
 		{
 			main->default_export->provider_name_export = gcnew CLI_DEFAULT::CLI_PROVIDER_NAME();
 
+			main->default_export->provider_name_export->VALUE = gcnew CLI_DEFAULT::CLI_PROVIDER_NAME::VV();
+
 			save_default_data_of_attr<CLI_DEFAULT::CLI_PROVIDER_NAME^, SDP::PROVIDER_NAME*>(
 				main->default_export->provider_name_export,
 				dd,
 				((B)submain)->default_export->provider_name_export
 				);
 
-			main->default_export->provider_name_export->VALUE.provider_name = gcnew System::String(((B)submain)->default_export->provider_name_export->VALUE.provider_name);
+			main->default_export->provider_name_export->VALUE->provider_name = gcnew System::String(((B)submain)->default_export->provider_name_export->VALUE.provider_name);
 		}
 
 		//  LANGUAGE_BASE_ATTRIBUTE_ID_LIST
@@ -793,15 +777,17 @@ private:
 		{
 			main->default_export->language_base_attribute_id_list_export = gcnew CLI_DEFAULT::CLI_LANGUAGE_BASE_ATTRIBUTE_ID_LIST();
 
+			main->default_export->language_base_attribute_id_list_export->VALUE = gcnew CLI_DEFAULT::CLI_LANGUAGE_BASE_ATTRIBUTE_ID_LIST::VV();
+
 			save_default_data_of_attr<CLI_DEFAULT::CLI_LANGUAGE_BASE_ATTRIBUTE_ID_LIST^, SDP::LANGUAGE_BASE_ATTRIBUTE_ID_LIST*>(
 				main->default_export->language_base_attribute_id_list_export,
 				dd,
 				((B)submain)->default_export->language_base_attribute_id_list_export
 				);
 
-			main->default_export->language_base_attribute_id_list_export->VALUE.triplet_id_natural_lang = ((B)submain)->default_export->language_base_attribute_id_list_export->VALUE.triplet_id_natural_lang;
-			main->default_export->language_base_attribute_id_list_export->VALUE.triplet_id_char_encoding = ((B)submain)->default_export->language_base_attribute_id_list_export->VALUE.triplet_id_char_encoding;
-			main->default_export->language_base_attribute_id_list_export->VALUE.triplet_attribute_id = ((B)submain)->default_export->language_base_attribute_id_list_export->VALUE.triplet_attribute_id;
+			main->default_export->language_base_attribute_id_list_export->VALUE->triplet_id_natural_lang = ((B)submain)->default_export->language_base_attribute_id_list_export->VALUE.triplet_id_natural_lang;
+			main->default_export->language_base_attribute_id_list_export->VALUE->triplet_id_char_encoding = ((B)submain)->default_export->language_base_attribute_id_list_export->VALUE.triplet_id_char_encoding;
+			main->default_export->language_base_attribute_id_list_export->VALUE->triplet_attribute_id = ((B)submain)->default_export->language_base_attribute_id_list_export->VALUE.triplet_attribute_id;
 		}
 
 		//  SERVICE_DESCRIPTION
@@ -809,13 +795,15 @@ private:
 		{
 			main->default_export->service_description_export = gcnew CLI_DEFAULT::CLI_SERVICE_DESCRIPTION();
 
+			main->default_export->service_description_export->VALUE = gcnew CLI_DEFAULT::CLI_SERVICE_DESCRIPTION::VV();
+
 			save_default_data_of_attr<CLI_DEFAULT::CLI_SERVICE_DESCRIPTION^, SDP::SERVICE_DESCRIPTION*>(
 				main->default_export->service_description_export,
 				dd,
 				((B)submain)->default_export->service_description_export
 				);
 
-			main->default_export->service_description_export->VALUE.description = gcnew System::String(((B)submain)->default_export->service_description_export->VALUE.description);
+			main->default_export->service_description_export->VALUE->description = gcnew System::String(((B)submain)->default_export->service_description_export->VALUE.description);
 		}
 
 	}
@@ -883,11 +871,11 @@ private:
 	template<class A>
 	void delete_default_data_of_attr(A main)
 	{
-		if (main->VALUE.value != nullptr)
-			delete main->VALUE.value;
+		if (main->VALUE->value != nullptr)
+			delete main->VALUE->value;
 
-		if (main->VALUE.element != nullptr)
-			delete main->VALUE.element;
+		if (main->VALUE->element != nullptr)
+			delete main->VALUE->element;
 
 		if (main->attr_id->value != nullptr)
 			delete main->attr_id->value;
@@ -906,96 +894,130 @@ private:
 		{
 			delete_default_data_of_attr<CLI_DEFAULT::CLI_SERVICE_RECORD^>(main->default_export->record_handle_export);
 
+			delete main->default_export->record_handle_export->VALUE;
+
 			delete main->default_export->record_handle_export;
 		}
 
 		if (main->default_export->class_id_handle_export != nullptr)
 		{
-			for (int a = 0; a < main->default_export->class_id_handle_export->VALUE.num_classes; a++)
+			if (main->default_export->class_id_handle_export->VALUE != nullptr)
 			{
-				if (main->default_export->class_id_handle_export->VALUE.classes[a]->element != nullptr)
-					delete main->default_export->class_id_handle_export->VALUE.classes[a]->element;
+				for (int a = 0; a < main->default_export->class_id_handle_export->VALUE->num_classes; a++)
+				{
+					if (main->default_export->class_id_handle_export->VALUE->classes[a]->element != nullptr)
+						delete main->default_export->class_id_handle_export->VALUE->classes[a]->element;
 
-				if (main->default_export->class_id_handle_export->VALUE.classes[a] != nullptr)
-					delete main->default_export->class_id_handle_export->VALUE.classes[a];
+					if (main->default_export->class_id_handle_export->VALUE->classes[a] != nullptr)
+						delete main->default_export->class_id_handle_export->VALUE->classes[a];
+				}
+
+				if (main->default_export->class_id_handle_export->VALUE->classes != nullptr)
+					delete main->default_export->class_id_handle_export->VALUE->classes;
+
+				delete_default_data_of_attr<CLI_DEFAULT::CLI_SERVICE_CLASS_ID_LIST^>(main->default_export->class_id_handle_export);
+
+
+				delete main->default_export->class_id_handle_export->VALUE;
 			}
-
-			if (main->default_export->class_id_handle_export->VALUE.classes != nullptr)
-				delete main->default_export->class_id_handle_export->VALUE.classes;
-
-			delete_default_data_of_attr<CLI_DEFAULT::CLI_SERVICE_CLASS_ID_LIST^>(main->default_export->class_id_handle_export);
 
 			delete main->default_export->class_id_handle_export;
 		}
 
 		if (main->default_export->protocol_descriptor_list_handle_export != nullptr)
 		{
-			for (int i = 0; i < main->default_export->protocol_descriptor_list_handle_export->VALUE.num_protocols; i++)
-				if (main->default_export->protocol_descriptor_list_handle_export->VALUE.protocols[i] != nullptr)
-				{
-					delete main->default_export->protocol_descriptor_list_handle_export->VALUE.protocols[i]->value;
-
-					if (main->default_export->protocol_descriptor_list_handle_export->VALUE.protocols[i]->pdsp != nullptr)
+			if (main->default_export->class_id_handle_export->VALUE != nullptr)
+			{
+				for (int i = 0; i < main->default_export->protocol_descriptor_list_handle_export->VALUE->num_protocols; i++)
+					if (main->default_export->protocol_descriptor_list_handle_export->VALUE->protocols[i] != nullptr)
 					{
-						if (main->default_export->protocol_descriptor_list_handle_export->VALUE.protocols[i]->pdsp->Supported_Network_Packet_Type_List != nullptr)
-							delete main->default_export->protocol_descriptor_list_handle_export->VALUE.protocols[i]->pdsp->Supported_Network_Packet_Type_List;
+						delete main->default_export->protocol_descriptor_list_handle_export->VALUE->protocols[i]->value;
 
-						delete main->default_export->protocol_descriptor_list_handle_export->VALUE.protocols[i]->pdsp;
+						if (main->default_export->protocol_descriptor_list_handle_export->VALUE->protocols[i]->pdsp != nullptr)
+						{
+							if (main->default_export->protocol_descriptor_list_handle_export->VALUE->protocols[i]->pdsp->Supported_Network_Packet_Type_List != nullptr)
+								delete main->default_export->protocol_descriptor_list_handle_export->VALUE->protocols[i]->pdsp->Supported_Network_Packet_Type_List;
+
+							delete main->default_export->protocol_descriptor_list_handle_export->VALUE->protocols[i]->pdsp;
+						}
+
+						delete main->default_export->protocol_descriptor_list_handle_export->VALUE->protocols[i];
 					}
 
-					delete main->default_export->protocol_descriptor_list_handle_export->VALUE.protocols[i];
-				}
+				delete main->default_export->protocol_descriptor_list_handle_export->VALUE->protocols;
 
-			delete main->default_export->protocol_descriptor_list_handle_export->VALUE.protocols;
+				delete_default_data_of_attr<CLI_DEFAULT::CLI_PROTOCOL_DESCRIPTOR_LIST^>(main->default_export->protocol_descriptor_list_handle_export);
 
-			delete_default_data_of_attr<CLI_DEFAULT::CLI_PROTOCOL_DESCRIPTOR_LIST^>(main->default_export->protocol_descriptor_list_handle_export);
+				delete main->default_export->protocol_descriptor_list_handle_export->VALUE;
+			}
 
 			delete main->default_export->protocol_descriptor_list_handle_export;
 		}
 
 		if (main->default_export->service_name_handle_export != nullptr)
 		{
-			if (main->default_export->service_name_handle_export->VALUE->service_name != nullptr)
-				delete main->default_export->service_name_handle_export->VALUE->service_name;
-
-			//delete_default_data_of_attr<CLI_DEFAULT::CLI_SERVICE_NAME^>(main->default_export->service_name_handle_export);
-
 			if (main->default_export->service_name_handle_export->VALUE != nullptr)
+			{
+				if (main->default_export->service_name_handle_export->VALUE->service_name != nullptr)
+					delete main->default_export->service_name_handle_export->VALUE->service_name;
+
+				delete_default_data_of_attr<CLI_DEFAULT::CLI_SERVICE_NAME^>(main->default_export->service_name_handle_export);
+
+
 				delete main->default_export->service_name_handle_export->VALUE;
+			}
 
 			delete main->default_export->service_name_handle_export;
 		}
 
 		if (main->default_export->bluetooth_profile_descriptor_list_handle_export != nullptr)
 		{
-			delete_default_data_of_attr<CLI_DEFAULT::CLI_BLUETOOTH_PROFILE_DESCRIPTOR_LIST^>(main->default_export->bluetooth_profile_descriptor_list_handle_export);
+			if (main->default_export->bluetooth_profile_descriptor_list_handle_export->VALUE != nullptr)
+			{
+				delete_default_data_of_attr<CLI_DEFAULT::CLI_BLUETOOTH_PROFILE_DESCRIPTOR_LIST^>(main->default_export->bluetooth_profile_descriptor_list_handle_export);
+				
+				delete main->default_export->bluetooth_profile_descriptor_list_handle_export->VALUE;
+			}
 
 			delete main->default_export->bluetooth_profile_descriptor_list_handle_export;
 		}
 
 		if (main->default_export->provider_name_export != nullptr)
 		{
-			if (main->default_export->provider_name_export->VALUE.provider_name != nullptr)
-				delete main->default_export->provider_name_export->VALUE.provider_name;
+			if (main->default_export->provider_name_export->VALUE != nullptr)
+			{
+				if (main->default_export->provider_name_export->VALUE->provider_name != nullptr)
+					delete main->default_export->provider_name_export->VALUE->provider_name;
 
-			delete_default_data_of_attr<CLI_DEFAULT::CLI_PROVIDER_NAME^>(main->default_export->provider_name_export);
+				delete_default_data_of_attr<CLI_DEFAULT::CLI_PROVIDER_NAME^>(main->default_export->provider_name_export);
+
+				delete main->default_export->provider_name_export->VALUE;
+			}
 
 			delete main->default_export->provider_name_export;
 		}
 
 		if (main->default_export->language_base_attribute_id_list_export != nullptr)
 		{
-			delete_default_data_of_attr<CLI_DEFAULT::CLI_LANGUAGE_BASE_ATTRIBUTE_ID_LIST^>(main->default_export->language_base_attribute_id_list_export);
+			if (main->default_export->language_base_attribute_id_list_export->VALUE != nullptr)
+			{
+				delete_default_data_of_attr<CLI_DEFAULT::CLI_LANGUAGE_BASE_ATTRIBUTE_ID_LIST^>(main->default_export->language_base_attribute_id_list_export);
+				delete main->default_export->language_base_attribute_id_list_export->VALUE;
+			}
 
 			delete main->default_export->language_base_attribute_id_list_export;
 		}
 
 		if (main->default_export->service_description_export != nullptr)
 		{
-			if (main->default_export->service_description_export->VALUE.description != nullptr)
-				delete main->default_export->service_description_export->VALUE.description;
+			if (main->default_export->service_description_export->VALUE != nullptr)
+			{
+				if (main->default_export->service_description_export->VALUE->description != nullptr)
+					delete main->default_export->service_description_export->VALUE->description;
 
-			delete_default_data_of_attr<CLI_DEFAULT::CLI_SERVICE_DESCRIPTION^>(main->default_export->service_description_export);
+				delete_default_data_of_attr<CLI_DEFAULT::CLI_SERVICE_DESCRIPTION^>(main->default_export->service_description_export);
+				delete main->default_export->service_description_export->VALUE;
+			}
 
 			delete main->default_export->service_description_export;
 		}
@@ -1031,19 +1053,19 @@ private:
 		for (int i = 0; i < locale->attr_id->size_bytes; i++)
 			main->attr_id->value[i] = locale->attr_id->value[i];
 
-		main->VALUE.element = gcnew CLI_ATTRIBUTE_ID_ELEMENT();
-		main->VALUE.element->element.size = locale->VALUE.element->element.size;
-		main->VALUE.element->element.type = locale->VALUE.element->element.type;
+		main->VALUE->element = gcnew CLI_ATTRIBUTE_ID_ELEMENT();
+		main->VALUE->element->element.size = locale->VALUE.element->element.size;
+		main->VALUE->element->element.type = locale->VALUE.element->element.type;
 
-		main->VALUE.size_bytes = locale->VALUE.size_bytes;
-		main->VALUE.additional_bits_flag = locale->VALUE.additional_bits_flag;
-		main->VALUE.additional_bits_for_size = locale->VALUE.additional_bits_for_size;
-		main->VALUE.size_bytes_additional = locale->VALUE.size_bytes_additional;
+		main->VALUE->size_bytes = locale->VALUE.size_bytes;
+		main->VALUE->additional_bits_flag = locale->VALUE.additional_bits_flag;
+		main->VALUE->additional_bits_for_size = locale->VALUE.additional_bits_for_size;
+		main->VALUE->size_bytes_additional = locale->VALUE.size_bytes_additional;
 
-		main->VALUE.value = gcnew array< BYTE^ >(locale->VALUE.size_bytes);
+		main->VALUE->value = gcnew array< BYTE^ >(locale->VALUE.size_bytes);
 
 		for (int i = 0; i < locale->VALUE.size_bytes; i++)
-			main->VALUE.value[i] = locale->VALUE.value[i];
+			main->VALUE->value[i] = locale->VALUE.value[i];
 	}
 
 
