@@ -4,7 +4,7 @@
 
 #include <stdio.h> // to printf()
 
-
+// DONE
 void CLI_DEFAULT_DATA::delete_exported_data_A2DP()
 {
 	if (a2dp_export != nullptr)
@@ -29,32 +29,76 @@ void CLI_DEFAULT_DATA::delete_exported_data_A2DP()
 		delete a2dp_export;
 	}
 }
-
+// DONE
 void CLI_DEFAULT_DATA::delete_exported_data_AVRCP()
 {
-	if (avrcp_export != nullptr)
+	if (avrcp_export_avrc != nullptr)
 	{
-		delete_exported_data_DEFAULT<CLI_EXPORTS::CLI_AVRCP_EXPORT^>(avrcp_export);
+		delete_exported_data_DEFAULT<CLI_EXPORTS::CLI_AVRCP_EXPORT^>(avrcp_export_avrc);
 
-		if (avrcp_export->supported_features_handle_export != nullptr)
+		if (avrcp_export_avrc->supported_features_handle_export != nullptr)
 		{
-			if (avrcp_export->supported_features_handle_export->VALUE != nullptr)
+			if (avrcp_export_avrc->supported_features_handle_export->VALUE != nullptr)
 			{
-				if (avrcp_export->supported_features_handle_export->VALUE->sfds != nullptr)
-					delete avrcp_export->supported_features_handle_export->VALUE->sfds;
+				if (avrcp_export_avrc->supported_features_handle_export->VALUE->sfds != nullptr)
+					delete avrcp_export_avrc->supported_features_handle_export->VALUE->sfds;
 
-				delete_default_data_of_attr<AVRCP::CLI_SUPPORTED_FEATURES^>(avrcp_export->supported_features_handle_export);
+				delete_default_data_of_attr<AVRCP::CLI_SUPPORTED_FEATURES^>(avrcp_export_avrc->supported_features_handle_export);
 
-				delete avrcp_export->supported_features_handle_export->VALUE;
+				delete avrcp_export_avrc->supported_features_handle_export->VALUE;
 			}
 
-			delete avrcp_export->supported_features_handle_export;
+			delete avrcp_export_avrc->supported_features_handle_export;
 		}
 
-		delete avrcp_export;
+		delete avrcp_export_avrc;
+	}
+
+	if (avrcp_export_avrct != nullptr)
+	{
+		delete_exported_data_DEFAULT<CLI_EXPORTS::CLI_AVRCP_EXPORT^>(avrcp_export_avrct);
+
+		if (avrcp_export_avrct->supported_features_handle_export != nullptr)
+		{
+			if (avrcp_export_avrct->supported_features_handle_export->VALUE != nullptr)
+			{
+				if (avrcp_export_avrct->supported_features_handle_export->VALUE->sfds != nullptr)
+					delete avrcp_export_avrct->supported_features_handle_export->VALUE->sfds;
+
+				delete_default_data_of_attr<AVRCP::CLI_SUPPORTED_FEATURES^>(avrcp_export_avrct->supported_features_handle_export);
+
+				delete avrcp_export_avrct->supported_features_handle_export->VALUE;
+			}
+
+			delete avrcp_export_avrct->supported_features_handle_export;
+		}
+
+		delete avrcp_export_avrct;
+	}
+
+	if (avrcp_export_avrcc != nullptr)
+	{
+		delete_exported_data_DEFAULT<CLI_EXPORTS::CLI_AVRCP_EXPORT^>(avrcp_export_avrcc);
+
+		if (avrcp_export_avrcc->supported_features_handle_export != nullptr)
+		{
+			if (avrcp_export_avrcc->supported_features_handle_export->VALUE != nullptr)
+			{
+				if (avrcp_export_avrcc->supported_features_handle_export->VALUE->sfds != nullptr)
+					delete avrcp_export_avrcc->supported_features_handle_export->VALUE->sfds;
+
+				delete_default_data_of_attr<AVRCP::CLI_SUPPORTED_FEATURES^>(avrcp_export_avrcc->supported_features_handle_export);
+
+				delete avrcp_export_avrcc->supported_features_handle_export->VALUE;
+			}
+
+			delete avrcp_export_avrcc->supported_features_handle_export;
+		}
+
+		delete avrcp_export_avrcc;
 	}
 }
-
+// DONE
 void CLI_DEFAULT_DATA::delete_exported_data_MAP()
 {
 	if (map_export != nullptr)
@@ -119,66 +163,119 @@ void CLI_DEFAULT_DATA::delete_exported_data_MAP()
 		delete map_export;
 	}
 }
-
+// DONE
 void CLI_DEFAULT_DATA::delete_exported_data_HFP()
 {
-	if (hfp_export != nullptr)
+	if (hfp_export_Handsfree != nullptr)
 	{
-		delete_exported_data_DEFAULT<CLI_EXPORTS::CLI_HFP_EXPORT^>(hfp_export);
+		delete_exported_data_DEFAULT<CLI_EXPORTS::CLI_HFP_EXPORT^>(hfp_export_Handsfree);
 
-		if (hfp_export->network_handle_export != nullptr)
+		if (hfp_export_Handsfree->network_handle_export != nullptr)
 		{
-			if (hfp_export->network_handle_export->VALUE != nullptr)
+			if (hfp_export_Handsfree->network_handle_export->VALUE != nullptr)
 			{
-				delete_default_data_of_attr<HFP::CLI_NETWORK^>(hfp_export->network_handle_export);
+				delete_default_data_of_attr<HFP::CLI_NETWORK^>(hfp_export_Handsfree->network_handle_export);
 
-				delete hfp_export->network_handle_export->VALUE;
+				delete hfp_export_Handsfree->network_handle_export->VALUE;
 			}
 
-			delete hfp_export->network_handle_export;
+			delete hfp_export_Handsfree->network_handle_export;
 		}
 
-		if (hfp_export->supported_features_handle_export != nullptr)
+		if (hfp_export_Handsfree->supported_features_handle_export != nullptr)
 		{
-			if (hfp_export->supported_features_handle_export->VALUE != nullptr)
+			if (hfp_export_Handsfree->supported_features_handle_export->VALUE != nullptr)
 			{
-				if (hfp_export->supported_features_handle_export->VALUE->sfds != nullptr)
-					delete hfp_export->supported_features_handle_export->VALUE->sfds;
+				if (hfp_export_Handsfree->supported_features_handle_export->VALUE->sfds != nullptr)
+					delete hfp_export_Handsfree->supported_features_handle_export->VALUE->sfds;
 
-				delete_default_data_of_attr<HFP::CLI_SUPPORTED_FEATURES^>(hfp_export->supported_features_handle_export);
+				delete_default_data_of_attr<HFP::CLI_SUPPORTED_FEATURES^>(hfp_export_Handsfree->supported_features_handle_export);
 
-				delete hfp_export->supported_features_handle_export->VALUE;
+				delete hfp_export_Handsfree->supported_features_handle_export->VALUE;
 			}
 
-			delete hfp_export->supported_features_handle_export;
+			delete hfp_export_Handsfree->supported_features_handle_export;
 		}
 
-		delete hfp_export;
+		delete hfp_export_Handsfree;
+	}
+
+	if (hfp_export_HandsfreeAG != nullptr)
+	{
+		delete_exported_data_DEFAULT<CLI_EXPORTS::CLI_HFP_EXPORT^>(hfp_export_HandsfreeAG);
+
+		if (hfp_export_HandsfreeAG->network_handle_export != nullptr)
+		{
+			if (hfp_export_HandsfreeAG->network_handle_export->VALUE != nullptr)
+			{
+				delete_default_data_of_attr<HFP::CLI_NETWORK^>(hfp_export_HandsfreeAG->network_handle_export);
+
+				delete hfp_export_HandsfreeAG->network_handle_export->VALUE;
+			}
+
+			delete hfp_export_HandsfreeAG->network_handle_export;
+		}
+
+		if (hfp_export_HandsfreeAG->supported_features_handle_export != nullptr)
+		{
+			if (hfp_export_HandsfreeAG->supported_features_handle_export->VALUE != nullptr)
+			{
+				if (hfp_export_HandsfreeAG->supported_features_handle_export->VALUE->sfds != nullptr)
+					delete hfp_export_HandsfreeAG->supported_features_handle_export->VALUE->sfds;
+
+				delete_default_data_of_attr<HFP::CLI_SUPPORTED_FEATURES^>(hfp_export_HandsfreeAG->supported_features_handle_export);
+
+				delete hfp_export_HandsfreeAG->supported_features_handle_export->VALUE;
+			}
+
+			delete hfp_export_HandsfreeAG->supported_features_handle_export;
+		}
+
+		delete hfp_export_HandsfreeAG;
 	}
 }
-
+// DONE
 void CLI_DEFAULT_DATA::delete_exported_data_HSP()
 {
-	if (hsp_export != nullptr)
+	if (hsp_export_headset != nullptr)
 	{
-		delete_exported_data_DEFAULT<CLI_EXPORTS::CLI_HSP_EXPORT^>(hsp_export);
+		delete_exported_data_DEFAULT<CLI_EXPORTS::CLI_HSP_EXPORT^>(hsp_export_headset);
 
-		if (hsp_export->remote_audio_volume_control_handle_export != nullptr)
+		if (hsp_export_headset->remote_audio_volume_control_handle_export != nullptr)
 		{
-			if (hsp_export->remote_audio_volume_control_handle_export->VALUE != nullptr)
+			if (hsp_export_headset->remote_audio_volume_control_handle_export->VALUE != nullptr)
 			{
-				delete_default_data_of_attr<HSP::CLI_REMOTE_AUDIO_VOLUME_CONTROL^>(hsp_export->remote_audio_volume_control_handle_export);
+				delete_default_data_of_attr<HSP::CLI_REMOTE_AUDIO_VOLUME_CONTROL^>(hsp_export_headset->remote_audio_volume_control_handle_export);
 
-				delete hsp_export->remote_audio_volume_control_handle_export->VALUE;
+				delete hsp_export_headset->remote_audio_volume_control_handle_export->VALUE;
 			}
 
-			delete hsp_export->remote_audio_volume_control_handle_export;
+			delete hsp_export_headset->remote_audio_volume_control_handle_export;
 		}
 
-		delete hsp_export;
+		delete hsp_export_headset;
+	}
+
+	if (hsp_export_headsetAG != nullptr)
+	{
+		delete_exported_data_DEFAULT<CLI_EXPORTS::CLI_HSP_EXPORT^>(hsp_export_headsetAG);
+
+		if (hsp_export_headsetAG->remote_audio_volume_control_handle_export != nullptr)
+		{
+			if (hsp_export_headsetAG->remote_audio_volume_control_handle_export->VALUE != nullptr)
+			{
+				delete_default_data_of_attr<HSP::CLI_REMOTE_AUDIO_VOLUME_CONTROL^>(hsp_export_headsetAG->remote_audio_volume_control_handle_export);
+
+				delete hsp_export_headsetAG->remote_audio_volume_control_handle_export->VALUE;
+			}
+
+			delete hsp_export_headsetAG->remote_audio_volume_control_handle_export;
+		}
+
+		delete hsp_export_headsetAG;
 	}
 }
-
+// DONE
 void CLI_DEFAULT_DATA::delete_exported_data_NAP()
 {
 	if (nap_export != nullptr)
@@ -224,7 +321,7 @@ void CLI_DEFAULT_DATA::delete_exported_data_NAP()
 		delete nap_export;
 	}
 }
-
+// DONE
 void CLI_DEFAULT_DATA::delete_exported_data_OBEX()
 {
 	if (obex_export != nullptr)
@@ -273,7 +370,7 @@ void CLI_DEFAULT_DATA::delete_exported_data_OBEX()
 		delete obex_export;
 	}
 }
-
+// DONE
 void CLI_DEFAULT_DATA::delete_exported_data_PBAP()
 {
 	if (pbap_export != nullptr)
@@ -322,7 +419,7 @@ void CLI_DEFAULT_DATA::delete_exported_data_PBAP()
 		delete pbap_export;
 	}
 }
-
+// DONE
 void CLI_DEFAULT_DATA::delete_exported_data_PNPINFO()
 {
 	if (pnpinfo_export != nullptr)
@@ -336,6 +433,16 @@ void CLI_DEFAULT_DATA::delete_exported_data_PNPINFO()
 				delete_default_data_of_attr<PNPINFO::CLI_INFO^>(pnpinfo_export->info_handle_export);
 
 				delete pnpinfo_export->info_handle_export->VALUE;
+			}
+
+			if (pnpinfo_export->info_handle_export->SpecificationID != nullptr)
+			{
+				delete pnpinfo_export->info_handle_export->SpecificationID;
+			}
+
+			if (pnpinfo_export->info_handle_export->Version != nullptr)
+			{
+				delete pnpinfo_export->info_handle_export->Version;
 			}
 
 			delete pnpinfo_export->info_handle_export;

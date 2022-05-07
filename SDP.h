@@ -371,7 +371,7 @@ namespace CLI_DEFAULT
 
 					Console::Write("\tValue: ");
 					for (int d = 0; d < VALUE->protocols[c]->additional_bits_for_size; d++)
-						Console::WriteLine("0x{0} ", VALUE->protocols[c]->value[d]);
+						Console::Write("0x{0} ", VALUE->protocols[c]->value[d]);
 					Console::WriteLine("");
 					
 					Console::WriteLine("\tID [0x{0:X4}][{1}]", VALUE->protocols[c]->protocol_id, getProtocolTypeString(VALUE->protocols[c]->protocol_id));
@@ -415,7 +415,7 @@ namespace CLI_DEFAULT
 
 								for (int aaa = 0; aaa < VALUE->protocols[c]->pdsp->num_of_Supported_Network_Packet_Type_List_PANU; aaa++)
 								{
-									Console::WriteLine("\tnetwork packet type [0x{0:X4}][{1}]\n", VALUE->protocols[c]->pdsp->Supported_Network_Packet_Type_List[aaa], getNetworkPacketTypeString((short)VALUE->protocols[c]->pdsp->Supported_Network_Packet_Type_List[aaa]));
+									Console::WriteLine("\tnetwork packet type [0x{0:X4}][{1}]", VALUE->protocols[c]->pdsp->Supported_Network_Packet_Type_List[aaa], getNetworkPacketTypeString((short)VALUE->protocols[c]->pdsp->Supported_Network_Packet_Type_List[aaa]));
 								}
 							}
 						}
@@ -1653,6 +1653,16 @@ namespace OBEX
 		VV^ VALUE;
 
 		// TODO: naredi do konca, ko bos imel example
+
+		template<class T>
+		void print(T v, IOCTL_S::DEFAULT_DATA dd)
+		{
+			Console::Write(DELIMITER_PRINT);
+			Console::Write(ATTR_NAME_23);
+
+			printATTR_ELEMENT(&dd);
+			printVALUE_ELEMENT(v, dd);
+		}
 	};
 
 	public ref struct CLI_SUPPORTED_FORMATS : CLI_DEFAULT::CLI_DEFAULT_OBJECT
@@ -1841,32 +1851,136 @@ namespace PBAP
 
 namespace PNPINFO
 {
+	public ref struct Specification_ID
+	{
+		SHORT value;
+		BYTE major_number;
+		BYTE minor_number;
+	};
+
+	public ref struct Version_data
+	{
+		int major_version;
+		int minor_version;
+		int sub_minor_version;
+	};
+	
 	public ref struct CLI_INFO : CLI_DEFAULT::CLI_DEFAULT_OBJECT
 	{
 		VV^ VALUE;
 		
-		SHORT SpecificationID;
-		SHORT VendorID;
+		Specification_ID^ SpecificationID;
+		SHORT VendorID_vector_location;
 		SHORT ProductID;
-		SHORT Version;
+		Version_data^ Version;
+
+
 		BOOL PrimaryRecord;
 		SHORT VendorIDSource;
 
-		template<class T>
-		void print(T v, IOCTL_S::DEFAULT_DATA dd)
+		void print_SpecificationID()
 		{
-			Console::Write(DELIMITER_PRINT);
-			Console::Write(ATTR_NAME_21);
+			System::Console::WriteLine("Specification ID: 0x{0:X4} [0x{1:X2}.0x{2:X2}]\n",
+				SpecificationID->value,
+				SpecificationID->major_number,
+				SpecificationID->minor_number
+			);
+		}
 
-			printATTR_ELEMENT(&dd);
-			printVALUE_ELEMENT(v, dd);
+		void print_VendorID(IOCTL_S::DEFAULT_DATA& dd)
+		{
+			// TODO: pretvori std::string v cli string
+			
+			System::Console::Write("Vendor ID:\n\tID: [0x{0:X4}] [{1}]\n\tCompany: ",
+				dd.vendors_list->at(VendorID_vector_location)->hexadecimal,
+				dd.vendors_list->at(VendorID_vector_location)->decimal//,
+				//gcnew String(dd.vendors_list->at(VendorID_vector_location)->company)
+			);
 
-			Console::WriteLine("Specification ID: 0x{0:X4}", this->SpecificationID);
-			Console::WriteLine("Vendor ID: 0x{0:X4}", this->VendorID);
-			Console::WriteLine("Product ID: 0x{0:X4}", this->ProductID);
-			Console::WriteLine("Version: 0x{0:X4}", this->Version);
-			Console::WriteLine("Primary Record: 0x{0:X2}", this->PrimaryRecord);
-			Console::WriteLine("Vendor ID Source: 0x{0:X4}", this->VendorIDSource);
+			//Console::WriteLine("", dd.vendors_list->at(VendorID_vector_location)->company);
+			std::cout << dd.vendors_list->at(this->VendorID_vector_location)->company << std::endl;
+			//printf("%s\n", dd.vendors_list->at(this->VendorID_vector_location)->company);
+		}
+
+		template<class T>
+		void print(T v, IOCTL_S::DEFAULT_DATA& dd, CLI_SDP_settings^ sdp_sett)
+		{
+			if (dd.attr_search_for_service.all == 1 ||
+				dd.attr_search_for_service.att_PNPINFO.PnpInfo == 1 ||
+				dd.attr_search_for_service.att_PNPINFO.SpecificationID == 1 ||
+				dd.attr_search_for_service.att_PNPINFO.VendorID == 1 ||
+				dd.attr_search_for_service.att_PNPINFO.ProductID == 1 ||
+				dd.attr_search_for_service.att_PNPINFO.Version == 1 ||
+				dd.attr_search_for_service.att_PNPINFO.PrimaryRecord == 1 ||
+				dd.attr_search_for_service.att_PNPINFO.VendorIDSource == 1
+				)
+			{
+				if (sdp_sett->print == 1 ||
+					sdp_sett->print_service.print_PNPINFO_attributes.PnpInfo == 1 ||
+					sdp_sett->print_service.print_PNPINFO_attributes.SpecificationID == 1 ||
+					sdp_sett->print_service.print_PNPINFO_attributes.VendorID == 1 ||
+					sdp_sett->print_service.print_PNPINFO_attributes.ProductID == 1 ||
+					sdp_sett->print_service.print_PNPINFO_attributes.Version == 1 ||
+					sdp_sett->print_service.print_PNPINFO_attributes.PrimaryRecord == 1 ||
+					sdp_sett->print_service.print_PNPINFO_attributes.VendorIDSource == 1 ||
+					sdp_sett->print_service.print_PNPINFO_attributes.ClientExecutableURL == 1 ||
+					sdp_sett->print_service.print_PNPINFO_attributes.DocumentationURL == 1
+					)
+				{
+					System::Console::Write(DELIMITER_PRINT);
+					System::Console::Write(ATTR_NAME_21);
+
+					printATTR_ELEMENT(&dd);
+					printVALUE_ELEMENT(v, dd);
+				}
+			}
+
+			if (dd.attr_search_for_service.all == 1 || dd.attr_search_for_service.att_PNPINFO.PnpInfo == 1 || dd.attr_search_for_service.att_PNPINFO.SpecificationID == 1)
+				if (sdp_sett->print == 1 ||
+					sdp_sett->print_service.print_PNPINFO_attributes.PnpInfo == 1 ||
+					sdp_sett->print_service.print_PNPINFO_attributes.SpecificationID == 1
+					)
+					print_SpecificationID();
+
+			if (dd.attr_search_for_service.all == 1 || dd.attr_search_for_service.att_PNPINFO.PnpInfo == 1 || dd.attr_search_for_service.att_PNPINFO.VendorID == 1)
+				if (sdp_sett->print == 1 ||
+					sdp_sett->print_service.print_PNPINFO_attributes.PnpInfo == 1 ||
+					sdp_sett->print_service.print_PNPINFO_attributes.VendorID == 1
+					)
+					print_VendorID(dd);
+
+			if (dd.attr_search_for_service.all == 1 || dd.attr_search_for_service.att_PNPINFO.PnpInfo == 1 || dd.attr_search_for_service.att_PNPINFO.ProductID == 1)
+				if (sdp_sett->print == 1 ||
+					sdp_sett->print_service.print_PNPINFO_attributes.PnpInfo == 1 ||
+					sdp_sett->print_service.print_PNPINFO_attributes.ProductID == 1
+					)
+					System::Console::WriteLine("Product ID: 0x{0:X4}", this->ProductID);
+			
+
+			if (dd.attr_search_for_service.all == 1 || dd.attr_search_for_service.att_PNPINFO.PnpInfo == 1 || dd.attr_search_for_service.att_PNPINFO.Version == 1)
+				if (sdp_sett->print == 1 ||
+					sdp_sett->print_service.print_PNPINFO_attributes.PnpInfo == 1 ||
+					sdp_sett->print_service.print_PNPINFO_attributes.Version == 1
+					)
+					System::Console::WriteLine("Version: {0:X2}.{1:X1}.{2:X1}", 
+						Version->major_version,
+						Version->minor_version,
+						Version->sub_minor_version
+					);
+
+			if (dd.attr_search_for_service.all == 1 || dd.attr_search_for_service.att_PNPINFO.PnpInfo == 1 || dd.attr_search_for_service.att_PNPINFO.PrimaryRecord == 1)
+				if (sdp_sett->print == 1 ||
+					sdp_sett->print_service.print_PNPINFO_attributes.PnpInfo == 1 ||
+					sdp_sett->print_service.print_PNPINFO_attributes.PrimaryRecord == 1
+					)
+					System::Console::WriteLine("Primary Record: 0x{0:X2}", this->PrimaryRecord);
+			
+			if (dd.attr_search_for_service.all == 1 || dd.attr_search_for_service.att_PNPINFO.PnpInfo == 1 || dd.attr_search_for_service.att_PNPINFO.VendorIDSource == 1)
+				if (sdp_sett->print == 1 ||
+					sdp_sett->print_service.print_PNPINFO_attributes.PnpInfo == 1 ||
+					sdp_sett->print_service.print_PNPINFO_attributes.VendorIDSource == 1
+					)
+					System::Console::WriteLine("Vendor ID Source: 0x{0:X4}", this->VendorIDSource);
 		}
 	};
 }
