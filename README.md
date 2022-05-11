@@ -14,7 +14,7 @@ Here you have managed code (APIs) from native C++ unmanaged code (APIs).
 - functional
 
 ## DLL, lib and header
-Before you can use this dll file, you must add to your project:
+Before you can use this project, you must add to your project **(it must be the same build type, example: Debug x64)**:
 
 1. header:
 
@@ -57,26 +57,31 @@ DLL wrapper have next functions:
 #### Set/Dsiable functions
 - void CLI_set_all_SDP_service_for_search()
 > Here you set all services to TRUE for search
-- void CLI_set_SDP_service_for_search(Int16 service)
-> Here you set specific service to TRUE for search
-- void CLI_disable_SDP_service_for_search(Int16 service)
-> Here you set specific service to FALSE for search
+- void CLI_set_SDP_service_for_search(Int16 service, int OnOff)
+> Here you set specific service to TRUE or FALSE for search
+
 - void CLI_set_all_attr_of_SDP_service_for_search()
 > Here you can set all atrributes for search
-- void CLI_set_default_attr_of_SDP_service_for_search(Int16 attr)
-> Here you can set only default attribute to TRUE for search
-- void CLI_set_service_specific_attr_of_SDP_service_for_search(Int16 service, Int16 attr)
-> Here you can set only service specific attribute to TRUE for search
-- void CLI_set_all_default_attr_print()
-> Here you can set all default atrributes to TRUE for print in console
-- void CLI_disable_all_default_attr_print()
-> Here you can set all default atrributes to FALSE for print in console
-- void CLI_set_default_attr_print(Int16 def_attr, int onOff)
-> Here you can set default attribute to TRUE or FALSE for print in console
+- void CLI_set_default_attr_of_SDP_service_for_search(Int16 attr, int OnOff);
+> Here you can set only default attribute to TRUE or FALSE for search
+- void CLI_set_service_specific_attr_of_SDP_service_for_search(Int16 service, Int16 attr, int OnOff)
+> Here you can set only service specific attribute to TRUE or FALSE for search
+
+- void CLI_set_all_default_attr_for_search()
+> Here you can set for all default attributes to TRUE or FALSE for search
+- void CLI_set_all_spec_service_attr_for_search()
+> Here you can set for all specific attributes of service to TRUE or FALSE for search
+
+- void CLI_set_all_default_attr_print(int onOff)
+> Here you can set all default attributes to TRUE or FALSE for print in console
 - void CLI_set_all_specific_attrs_service_print(Int16 service, int onOff)
 > Here you can set all service specific atrributes to TRUE or FALSE for print in console
+
+- void CLI_set_default_attr_print(Int16 def_attr, int onOff)
+> Here you can set default attribute to TRUE or FALSE for print in console
 - void CLI_set_specific_attr_service_print(Int16 service, Int16 attr, int onOff)
 > Here you can set service specific attribute to TRUE or FALSE for print in console
+
 
 #### Show functions
 - void CLI_show_print_service()
@@ -88,46 +93,78 @@ DLL wrapper have next functions:
 ## Structures (Details in progress...)
 - CLI_SDP_settings^ sdp_settings;
 > Look at Settings of dll
+
 - CLI_SEARCHED_CACHED_DEVICES^ cached_devices;
 > Here you get list of devices
 - CLI_LOCAL_RADIO_DEVICE_DATA^ local_device_radio;
 > Here you get all data of local bluetooth radio
-- CLI_A2DP_EXPORT^ a2dp_export
+
+- CLI_A2DP_EXPORT^ a2dp_export ([DETAILS](a2dp.md))
 > Exported data for AudioSource service
-- CLI_AVRCP_EXPORT^ avrcp_export
-> Exported data for A_V_RemoteControl, A_V_RemoteControlTarget and A_V_RemoteControlController services
-- CLI_MAP_EXPORT^ map_export
+
+
+- CLI_AVRCP_EXPORT^ avrcp_export_avrc
+> Exported data for A_V_RemoteControl services
+- CLI_AVRCP_EXPORT^ avrcp_export_avrct
+> Exported data for A_V_RemoteControlTarget services
+- CLI_AVRCP_EXPORT^ avrcp_export_avrcc
+> Exported data for A_V_RemoteControlController services
+
+- CLI_MAP_EXPORT^ map_export ([DETAILS](map.md))
 > Exported data for Message_Access_Server service
-- CLI_HFP_EXPORT^ hfp_export
-> Exported data for Handsfree and HandsfreeAudioGateway services
-- CLI_HSP_EXPORT^ hsp_export
-> Exported data for Headset and Headset_Audio_Gateway service
-- CLI_NAP_EXPORT^ nap_export
+
+- CLI_HFP_EXPORT^ hfp_export_Handsfree
+> Exported data for Handsfree services
+- CLI_HFP_EXPORT^ hfp_export_HandsfreeAG
+> Exported data for HandsfreeAudioGateway services
+
+- CLI_HSP_EXPORT^ hsp_export_headset
+> Exported data for Headset service
+- CLI_HSP_EXPORT^ hsp_export_headsetAG
+> Exported data for Headset_Audio_Gateway service
+
+- CLI_NAP_EXPORT^ nap_export ([DETAILS](nap.md))
 > Exported data for Android Network Access Point and PANU(in progress...) service
-- CLI_OBEX_EXPORT^ obex_export
+- CLI_OBEX_EXPORT^ obex_export ([DETAILS](obex.md))
 > Exported data for OBEXObjectPush service
-- CLI_PBAP_EXPORT^ pbap_export
+- CLI_PBAP_EXPORT^ pbap_export ([DETAILS](pbap.md))
 > Exported data for Phonebook_Access_PSE service
-- CLI_INFO_EXPORT^ pnpinfo_export
+- CLI_INFO_EXPORT^ pnpinfo_export ([DETAILS](pnpinfo.md))
 > Exported data for PnPInformation service
 
 
 ## Settings of dll
 #### Printing
-- Debug
-- print
-- print_service
+> Through: 
+> * CLI_set_all_default_attr_print
+> * CLI_set_all_specific_attrs_service_print
+> * CLI_set_default_attr_print
+> * CLI_set_specific_attr_service_print
+> 
+> OR
+> * debug flag
+> * print flag
+
 #### Attributes Searching
-> Through void CLI_set_all_attr_of_SDP_service_for_search(), void CLI_set_default_attr_of_SDP_service_for_search(Int16 attr) and void CLI_set_service_specific_attr_of_SDP_service_for_search(Int16 service, Int16 attr)
-> you can set TRUE or false
+> Through: 
+> * CLI_set_all_attr_of_SDP_service_for_search 
+> * CLI_set_default_attr_of_SDP_service_for_search 
+> * CLI_set_service_specific_attr_of_SDP_service_for_search
+
 #### Service Searching
-> Through void CLI_set_all_SDP_service_for_search(), void CLI_set_SDP_service_for_search(Int16 service) and void CLI_disable_SDP_service_for_search(Int16 service)
-> you can set TRUE or false
+> Through: 
+> * CLI_set_all_SDP_service_for_search
+> * CLI_set_SDP_service_for_search
+
 
 # How to use it on client app
 You have more options:
-1. in project add as new reference for "Cpp-CLI_wrapper_Bluetooth_SDP.dll"
-2. copy&paste "Cpp-CLI_wrapper_Bluetooth_SDP.dll" and "SDP_data.dll" to your app project
+1. option
+> in project add as new reference for "Cpp-CLI_wrapper_Bluetooth_SDP.dll"
+> and copy&paste "CompanyIdentfiers.cvs", "SDP_data.lib" and "SDP_data.dll"
+> 
+2. option
+> copy&paste "Cpp-CLI_wrapper_Bluetooth_SDP.dll", "SDP_data.lib" and "SDP_data.dll" and "CompanyIdentfiers.cvs" to your app project
 
 # Examples 
 ### Connection and disconnection from local radio
@@ -232,16 +269,41 @@ FLAGS: 7
 // 1. you must create class instance
 CLI_DEFAULT_DATA data = new CLI_DEFAULT_DATA();
 
-// 2.1 if you want to print it in console you must set
+
+/*******************************************************************/
+/* PRINTING SETTINGS */
+// 2.1 if you want to print all of it in console you must set
 data.sdp_settings.print = 1;
+// OR
+// if you want print only default attributes
+data.CLI_set_all_default_attr_print(1);
+// OR
+// if you want to print only service specific attributes
+data.CLI_set_all_specific_attrs_service_print((short)CLI_SERVICE_CLASS_ID.Headset_Audio_Gateway, 1);
+// OR 
+// if you want print only one default attribute
+data.CLI_set_default_attr_print((short)CLI_ATTRIBUTE_ID.ServiceName, 1);
+// OR
+// if you want print only one specific attribute
+data.CLI_set_specific_attr_service_print(
+    (short)CLI_SERVICE_CLASS_ID.Headset_Audio_Gateway, 
+    (short)CLI_HSP.CLI_ATTRIBUTE_ID_DEVICE_HSP.RemoteAudioVolumeControl, 
+    1
+);
+/*******************************************************************/
 
 // 3.1 good practice (reseting to FALSE all settings)
 data.CLI_reset_SDP_service_for_search();      
 data.CLI_reset_attr_search_for_service();
 
-// 3.2 enabling AudioSource service for searching on device and enabling all attributes to search
-data.CLI_set_SDP_service_for_search((short)CLI_SERVICE_CLASS_ID.AudioSource);
+/*******************************************************************/
+/* SEARCHING SETTINGS */
+// 3.2 enabling AudioSource service for searching on device 
+data.CLI_set_SDP_service_for_search((short)CLI_SERVICE_CLASS_ID.Headset_Audio_Gateway, 1);
+// enabling all attributes to search (default and specific)
 data.CLI_set_all_attr_of_SDP_service_for_search();
+
+/*******************************************************************/
 
 // 4. call CLI_connectToDevice to connect to local bluetooth radio
 data.CLI_connectToDevice("\\\\?\\GLOBALROOT\\Device\\USBPDO-4");
@@ -249,9 +311,13 @@ data.CLI_connectToDevice("\\\\?\\GLOBALROOT\\Device\\USBPDO-4");
 // 5. calling CLI_SDPsearch() function with device bluetooth address
 data.CLI_SDPsearch("XX:XX:XX:XX:XX:XX");
 
+/*******************************************************************/
+/* EXPORTING DATA */
 // 6. exporting data
-Console.WriteLine("{0}",data.a2dp_export.default_export.service_name_handle_export.VALUE.service_name);
-Console.WriteLine("{0:X}",data.a2dp_export.default_export.class_id_handle_export.VALUE.classes[0].value);
+Console.WriteLine("{0}", data.hsp_export_headsetAG.default_export.service_name_handle_export.VALUE.service_name);
+Console.WriteLine("{0:X}", data.hsp_export_headsetAG.default_export.class_id_handle_export.VALUE.classes[0].value);
+
+/*******************************************************************/
 
 // 7. close the connection
 data.CLI_closeConnectionToDevice();

@@ -22,27 +22,17 @@ CLI_DEFAULT_DATA::~CLI_DEFAULT_DATA()
 	if (dd != nullptr)
 	{
 		if (dd->services_for_search.AudioSource == 1)
-		{
 			delete_exported_data_A2DP();
-		}
 
 		if (dd->services_for_search.A_V_RemoteControl == 1)
-		{
 			delete_exported_data_AVRCP();
-		}
 
 		if (dd->services_for_search.Message_Access_Server == 1)
-		{
 			delete_exported_data_MAP();
-		}
 
 		if (dd->services_for_search.Handsfree == 1 || dd->services_for_search.HandsfreeAudioGateway == 1)
-		{
-			// TODO: preveri kako je s tem, ker se je spreminjalo
 			delete_exported_data_HFP();
-		}
 
-		// TODO: preveri kako je s tem, ker se je spreminjalo
 		if (dd->services_for_search.Headset == 1 || dd->services_for_search.Headset_Audio_Gateway == 1)
 			delete_exported_data_HSP();
 
@@ -70,28 +60,17 @@ CLI_DEFAULT_DATA::!CLI_DEFAULT_DATA()
 	if (dd != nullptr)
 	{
 		if (dd->services_for_search.AudioSource == 1)
-		{
 			delete_exported_data_A2DP();
-		}
 
 		if (dd->services_for_search.A_V_RemoteControl == 1)
-		{
-			// TODO: preveri kako je s tem, ker se je spreminjalo
 			delete_exported_data_AVRCP();
-		}
 
 		if (dd->services_for_search.Message_Access_Server == 1)
-		{
 			delete_exported_data_MAP();
-		}
 
 		if (dd->services_for_search.Handsfree == 1 || dd->services_for_search.HandsfreeAudioGateway == 1)
-		{
-			// TODO: preveri kako je s tem, ker se je spreminjalo
 			delete_exported_data_HFP();
-		}
 
-		// TODO: preveri kako je s tem, ker se je spreminjalo
 		if (dd->services_for_search.Headset == 1 || dd->services_for_search.Headset_Audio_Gateway == 1)
 			delete_exported_data_HSP();
 
@@ -415,6 +394,17 @@ void CLI_DEFAULT_DATA::CLI_set_all_attr_of_SDP_service_for_search()
 
 	if (sdp_settings->debug == 1)
 		Console::WriteLine("[DEBUG] CLI_set_all_attr_of_SDP_service_for_search()");
+}
+
+
+void CLI_DEFAULT_DATA::CLI_set_all_default_attr_of_SDP_service_for_search(int OnOff)
+{
+	dd->set_all_default_attr_search_for_service(OnOff);
+}
+
+void CLI_DEFAULT_DATA::CLI_set_all_special_attr_of_SDP_service_for_search(Int16 service, int OnOff)
+{
+	dd->set_all_special_attr_search_for_service(service, OnOff);
 }
 
 

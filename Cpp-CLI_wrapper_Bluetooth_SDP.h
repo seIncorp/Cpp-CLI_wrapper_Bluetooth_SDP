@@ -257,7 +257,7 @@ public ref struct CLI_SDP_settings
 	//int print_with_outside_funct;
 
 	//System::String test;
-
+	 
 	ref struct SDP_print_service
 	{
 		/* DEFAULT ATTR. */
@@ -572,16 +572,17 @@ public:
 	// set all, specific service for search
 	void CLI_set_all_SDP_service_for_search();
 	void CLI_set_SDP_service_for_search(Int16 service, int OnOff);
-	//void CLI_disable_SDP_service_for_search(Int16 service);
 
 
 
 	// set all, default and specific attr. for search
 	void CLI_set_all_attr_of_SDP_service_for_search();
+
 	void CLI_set_default_attr_of_SDP_service_for_search(Int16 attr, int OnOff);
 	void CLI_set_service_specific_attr_of_SDP_service_for_search(Int16 service, Int16 attr, int OnOff);
-	// TODO: dodaj se za set_all_default_attr_search_for_service in set_all_special_attr_search_for_service
 
+	void CLI_set_all_default_attr_of_SDP_service_for_search(int OnOff);
+	void CLI_set_all_special_attr_of_SDP_service_for_search(Int16 service, int OnOff);
 
 
 	// functions for different data
@@ -593,7 +594,6 @@ public:
 	// printing
 	void CLI_set_all_default_attr_print(int onOff);
 	void CLI_set_all_specific_attrs_service_print(Int16 service, int onOff);
-	//void CLI_disable_all_default_attr_print();
 
 	void CLI_set_default_attr_print(Int16 def_attr, int onOff);
 	void CLI_set_specific_attr_service_print(Int16 service, Int16 attr, int onOff);
@@ -707,7 +707,6 @@ private:
 				((B)submain)->default_export->protocol_descriptor_list_handle_export
 				);
 
-
 			main->default_export->protocol_descriptor_list_handle_export->VALUE->num_protocols = ((B)submain)->default_export->protocol_descriptor_list_handle_export->VALUE.num_protocols;
 			main->default_export->protocol_descriptor_list_handle_export->VALUE->_BNEP_flag = ((B)submain)->default_export->protocol_descriptor_list_handle_export->VALUE._BNEP_flag;
 
@@ -754,16 +753,12 @@ private:
 			main->default_export->service_name_handle_export = gcnew CLI_DEFAULT::CLI_SERVICE_NAME();
 
 			main->default_export->service_name_handle_export->VALUE = gcnew CLI_DEFAULT::CLI_SERVICE_NAME::VV();
-			//main->default_export->service_name_handle_export->VALUE->service_name = gcnew System::String("DELA TOLE!!!");
 
 			save_default_data_of_attr<CLI_DEFAULT::CLI_SERVICE_NAME^, SDP::SERVICE_NAME*>(
 				main->default_export->service_name_handle_export,
 				dd,
 				((B)submain)->default_export->service_name_handle_export
 				);
-
-
-
 
 			main->default_export->service_name_handle_export->VALUE->service_name = gcnew System::String(((B)submain)->default_export->service_name_handle_export->VALUE.service_name);
 		}
@@ -780,7 +775,6 @@ private:
 				dd,
 				((B)submain)->default_export->bluetooth_profile_descriptor_list_handle_export
 				);
-
 
 			main->default_export->bluetooth_profile_descriptor_list_handle_export->VALUE->profile_UUID = ((B)submain)->default_export->bluetooth_profile_descriptor_list_handle_export->VALUE.profile_UUID;
 			main->default_export->bluetooth_profile_descriptor_list_handle_export->VALUE->profile_version = ((B)submain)->default_export->bluetooth_profile_descriptor_list_handle_export->VALUE.profile_version;
@@ -835,7 +829,6 @@ private:
 
 			main->default_export->service_description_export->VALUE->description = gcnew System::String(((B)submain)->default_export->service_description_export->VALUE.description);
 		}
-
 	}
 
 	void save_exported_data_A2DP();
