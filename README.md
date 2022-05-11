@@ -110,7 +110,7 @@ DLL wrapper have next functions:
 - CLI_AVRCP_EXPORT^ avrcp_export_avrcc
 > Exported data for A_V_RemoteControlController services
 
-- CLI_MAP_EXPORT^ map_export
+- CLI_MAP_EXPORT^ map_export ([DETAILS](map.md))
 > Exported data for Message_Access_Server service
 
 - CLI_HFP_EXPORT^ hfp_export_Handsfree
@@ -123,13 +123,13 @@ DLL wrapper have next functions:
 - CLI_HSP_EXPORT^ hsp_export_headsetAG
 > Exported data for Headset_Audio_Gateway service
 
-- CLI_NAP_EXPORT^ nap_export
+- CLI_NAP_EXPORT^ nap_export ([DETAILS](nap.md))
 > Exported data for Android Network Access Point and PANU(in progress...) service
-- CLI_OBEX_EXPORT^ obex_export
+- CLI_OBEX_EXPORT^ obex_export ([DETAILS](obex.md))
 > Exported data for OBEXObjectPush service
-- CLI_PBAP_EXPORT^ pbap_export
+- CLI_PBAP_EXPORT^ pbap_export ([DETAILS](pbap.md))
 > Exported data for Phonebook_Access_PSE service
-- CLI_INFO_EXPORT^ pnpinfo_export
+- CLI_INFO_EXPORT^ pnpinfo_export ([DETAILS](pnpinfo.md))
 > Exported data for PnPInformation service
 
 
