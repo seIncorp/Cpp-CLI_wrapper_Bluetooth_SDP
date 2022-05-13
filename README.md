@@ -90,37 +90,37 @@ DLL wrapper have next functions:
 > IN PROGRESS...
 
 
-## Structures (Details in progress...)
-- CLI_SDP_settings^ sdp_settings;
+## Structures
+- CLI_SDP_settings^ sdp_settings ([DETAILS](sdp_settings.md))
 > Look at Settings of dll
 
-- CLI_SEARCHED_CACHED_DEVICES^ cached_devices;
+- CLI_SEARCHED_CACHED_DEVICES^ cached_devices ([DETAILS](searched_cached_devices.md))
 > Here you get list of devices
-- CLI_LOCAL_RADIO_DEVICE_DATA^ local_device_radio;
+- CLI_LOCAL_RADIO_DEVICE_DATA^ local_device_radio ([DETAILS](local_radio_device.md))
 > Here you get all data of local bluetooth radio
 
 - CLI_A2DP_EXPORT^ a2dp_export ([DETAILS](a2dp.md))
 > Exported data for AudioSource service
 
 
-- CLI_AVRCP_EXPORT^ avrcp_export_avrc
+- CLI_AVRCP_EXPORT^ avrcp_export_avrc ([DETAILS](avrcp.md))
 > Exported data for A_V_RemoteControl services
-- CLI_AVRCP_EXPORT^ avrcp_export_avrct
+- CLI_AVRCP_EXPORT^ avrcp_export_avrct ([DETAILS](avrcp.md))
 > Exported data for A_V_RemoteControlTarget services
-- CLI_AVRCP_EXPORT^ avrcp_export_avrcc
+- CLI_AVRCP_EXPORT^ avrcp_export_avrcc ([DETAILS](avrcp.md))
 > Exported data for A_V_RemoteControlController services
 
 - CLI_MAP_EXPORT^ map_export ([DETAILS](map.md))
 > Exported data for Message_Access_Server service
 
-- CLI_HFP_EXPORT^ hfp_export_Handsfree
+- CLI_HFP_EXPORT^ hfp_export_Handsfree ([DETAILS](hfp.md))
 > Exported data for Handsfree services
-- CLI_HFP_EXPORT^ hfp_export_HandsfreeAG
+- CLI_HFP_EXPORT^ hfp_export_HandsfreeAG ([DETAILS](hfp.md))
 > Exported data for HandsfreeAudioGateway services
 
-- CLI_HSP_EXPORT^ hsp_export_headset
+- CLI_HSP_EXPORT^ hsp_export_headset ([DETAILS](hsp.md))
 > Exported data for Headset service
-- CLI_HSP_EXPORT^ hsp_export_headsetAG
+- CLI_HSP_EXPORT^ hsp_export_headsetAG ([DETAILS](hsp.md))
 > Exported data for Headset_Audio_Gateway service
 
 - CLI_NAP_EXPORT^ nap_export ([DETAILS](nap.md))
